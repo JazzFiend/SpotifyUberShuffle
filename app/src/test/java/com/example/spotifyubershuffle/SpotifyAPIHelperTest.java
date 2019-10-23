@@ -31,7 +31,6 @@ public class SpotifyAPIHelperTest {
         expectedResult.add("123");
         expectedResult.add("abc");
 
-        // TODO: Mock out Track ID Extractor?
         Collection<String> favoriteTrackIds = apiHelper.getFavoriteTrackIds();
         assertEquals(expectedResult, favoriteTrackIds);
     }
@@ -43,7 +42,6 @@ public class SpotifyAPIHelperTest {
         expectedResult.add("track2");
         expectedResult.add("track3");
 
-        // TODO: Mock out Track ID Extractor?
         Collection<String> favoriteAlbumTrackIds = apiHelper.getTrackIdsFromFavoriteAlbums();
         assertEquals(expectedResult, favoriteAlbumTrackIds);
     }

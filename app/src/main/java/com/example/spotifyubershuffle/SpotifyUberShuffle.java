@@ -27,8 +27,8 @@ public class SpotifyUberShuffle {
         trackLibrary.addAll(albumTrackSet);
     }
 
-    public String createShufflePlaylist(String userId) throws ShuffleException {
-        List<String> shuffledSongIds = shuffle();
+    public String createShufflePlaylist(String userId, int trackCount) throws ShuffleException {
+        List<String> shuffledSongIds = shuffle(trackCount);
         String playlistId = spotifyAPIHelper.createPlaylist("UberShuffle", "UberShuffle", false, userId);
         return spotifyAPIHelper.addToPlaylist(playlistId, shuffledSongIds);
     }
@@ -36,17 +36,15 @@ public class SpotifyUberShuffle {
     @VisibleForTesting
     public Collection<String> getTrackLibrary() { return trackLibrary; }
 
-    private List<String> shuffle() throws ShuffleException {
+    private List<String> shuffle(int trackCount) throws ShuffleException {
         if(trackLibrary.isEmpty()) { throw new ShuffleException("The library is empty"); }
 
-        //TODO: Should probably make this an argument
-        final int SHUFFLE_PLAYLIST_SIZE = 50;
         Random rng = new Random();
         final int librarySize = trackLibrary.size();
         List<String> trackLibraryList = new ArrayList<>(trackLibrary);
         List<String> shufflePlaylist = new ArrayList<>();
 
-        while(shufflePlaylist.size() < SHUFFLE_PLAYLIST_SIZE && shufflePlaylist.size() < trackLibraryList.size()) {
+        while(shufflePlaylist.size() < trackCount && shufflePlaylist.size() < trackLibraryList.size()) {
             int trackNumber = rng.nextInt(librarySize);
             if(!shufflePlaylist.contains(trackLibraryList.get(trackNumber))) {
                 shufflePlaylist.add(trackLibraryList.get(trackNumber));

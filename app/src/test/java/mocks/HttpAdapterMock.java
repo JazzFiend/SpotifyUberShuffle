@@ -5,12 +5,13 @@ import com.example.spotifyubershuffle.HttpAdapter.HttpAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class HttpAdapterMock implements HttpAdapter {
     @Override
-    public JSONObject makeGetRequest(String url) throws ExecutionException {
+    public JSONObject makeGetRequest(String url) {
         String getFavoriteTrackResponse1 = "{\"items\": [{\"track\": {\"id\": \"123\"}},{\"track\": {\"id\": \"abc\"}}],\"next\": \"sendFavoriteTrackResponse2\"}";
         String getFavoriteTrackResponse2 = "{\"items\": [{\"track\": {\"id\": \"123\"}}],\"next\": \"null\"}";
         String getFavoriteAlbumResponse1 = "{\"items\": [{\"album\": {\"id\": \"123\"}},{\"album\": {\"id\": \"abc\"}}],\"next\": \"sendFavoriteAlbumResponse2\"}";
@@ -36,13 +37,19 @@ public class HttpAdapterMock implements HttpAdapter {
                     throw new RuntimeException("Bad Test URL Seen");
             }
         } catch(JSONException e) {
-            // TODO: This smells. I'm disguising a JSON Exception as a Execution Exception. Maybe have a seperate test class that generates the JSONObjects and swallow the excepton there?
-            throw new ExecutionException(e);
+            // Returning null here. The test data is correct and shouldn't change much so we shouldn't throw a JSON Exception.
+            // If we do, then the null will cause a null pointer exception.
+            return null;
         }
     }
 
     @Override
-    public JSONObject makePostRequest(String url, Map<String, String> body) throws ExecutionException, InterruptedException {
+    public JSONObject makePostRequest(String url) throws InterruptedException {
+        return makePostRequest(url, new HashMap<>());
+    }
+
+    @Override
+    public JSONObject makePostRequest(String url, Map<String, String> body) throws InterruptedException {
         try {
             switch (url) {
                 case "https://api.spotify.com/v1/users/UserID/playlists":
@@ -56,8 +63,9 @@ public class HttpAdapterMock implements HttpAdapter {
                     throw new RuntimeException("Bad Test URL Seen");
             }
         } catch(JSONException e) {
-            // TODO: This smells. I'm disguising a JSON Exception as a Execution Exception. Maybe have a seperate test class that generates the JSONObjects and swallow the excepton there?
-            throw new ExecutionException(e);
+            // Returning null here. The test data is correct and shouldn't change much so we shouldn't throw a JSON Exception.
+            // If we do, then the null will cause a null pointer exception.
+            return null;
         }
     }
 }

@@ -81,8 +81,7 @@ public class SpotifyAPIHelperImpl implements SpotifyAPIHelper {
         try {
             for(String songID : songList) {
                 String urlWithTrackID = url + songID;
-                //TODO: Need version of MakePostRequest without body.
-                JSONObject response = httpAdapter.makePostRequest(urlWithTrackID, new HashMap<>());
+                JSONObject response = httpAdapter.makePostRequest(urlWithTrackID);
                 playListSnapshot = response.getString("snapshot_id");
             }
         } catch(InterruptedException | ExecutionException | JSONException e) {

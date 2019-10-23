@@ -26,7 +26,7 @@ public class SpotifyUberShuffleTest {
     @Test(expected = ShuffleException.class)
     public void createShufflePlaylistEmptyLibraryTest() throws ShuffleException {
         SpotifyUberShuffle uberShuffle = new SpotifyUberShuffle(new SpotifyAPIHelperMock());
-        uberShuffle.createShufflePlaylist("userID");
+        uberShuffle.createShufflePlaylist("userID", 5);
     }
 
     @Test
@@ -34,7 +34,7 @@ public class SpotifyUberShuffleTest {
         initializeUberShuffle();
 
         uberShuffle.populateLibrary();
-        assertEquals("PlaylistSnapshot", uberShuffle.createShufflePlaylist("userID"));
+        assertEquals("PlaylistSnapshot", uberShuffle.createShufflePlaylist("userID", 3));
     }
 
     private void initializeUberShuffle() {

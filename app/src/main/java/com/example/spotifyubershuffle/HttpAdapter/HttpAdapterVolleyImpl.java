@@ -30,6 +30,11 @@ public class HttpAdapterVolleyImpl implements HttpAdapter {
     }
 
     @Override
+    public JSONObject makePostRequest(String url) throws InterruptedException, ExecutionException {
+        return makePostRequest(url, new HashMap<>());
+    }
+
+    @Override
     public JSONObject makePostRequest(String url, Map<String, String> bodyParameters) throws InterruptedException, ExecutionException {
         return makeRequest(url, Request.Method.POST, bodyParameters);
     }
