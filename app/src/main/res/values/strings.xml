@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">SpotifyUberShuffle</string>
+    <string name="ubershuffle">UberShuffle</string>
+    <string name="accesstoken">Access Token</string>
+    <string name="username">Username</string>
+    <string name="number_tracks_detail">Number of tracks in playlist</string>
+    <string name="playlist_size_default">10</string>
 </resources>

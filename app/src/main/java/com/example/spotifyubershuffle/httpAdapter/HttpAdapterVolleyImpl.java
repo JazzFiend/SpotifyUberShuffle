@@ -1,4 +1,4 @@
-package com.example.spotifyubershuffle.HttpAdapter;
+package com.example.spotifyubershuffle.httpAdapter;
 
 import com.android.volley.ClientError;
 import com.android.volley.Request;
@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 
 import static com.example.spotifyubershuffle.App.getContext;
 
+//TODO: No unit tests here. Need to figure out how to mock RequestQueue
 public class HttpAdapterVolleyImpl implements HttpAdapter {
     private final String accessToken;
     private final RequestQueue requestQueue;
@@ -26,7 +27,7 @@ public class HttpAdapterVolleyImpl implements HttpAdapter {
 
     @Override
     public JSONObject makeGetRequest(String url) throws InterruptedException, ExecutionException {
-        return makeRequest(url, Request.Method.GET);
+        return makeRequest(url, Request.Method.GET, new HashMap<>());
     }
 
     @Override
@@ -37,10 +38,6 @@ public class HttpAdapterVolleyImpl implements HttpAdapter {
     @Override
     public JSONObject makePostRequest(String url, Map<String, String> bodyParameters) throws InterruptedException, ExecutionException {
         return makeRequest(url, Request.Method.POST, bodyParameters);
-    }
-
-    private JSONObject makeRequest(String url, int requestMethodInteger) throws InterruptedException, ExecutionException {
-        return makeRequest(url, requestMethodInteger, new HashMap<>());
     }
 
     private JSONObject makeRequest(String url, int requestMethodInteger, Map<String, String> bodyParameters) throws InterruptedException, ExecutionException {
@@ -77,7 +74,7 @@ public class HttpAdapterVolleyImpl implements HttpAdapter {
 
     private void sleepBasedOnRetry(ClientError clientError) throws InterruptedException {
         int secondsToSleep = Integer.parseInt(clientError.networkResponse.headers.get("Retry-After"));
-        Thread.sleep(secondsToSleep * 1000);
+        Thread.sleep(secondsToSleep * 1000 + 250);
     }
 
     private boolean isRateLimitError(ClientError clientError) {

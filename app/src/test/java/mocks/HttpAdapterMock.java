@@ -1,13 +1,12 @@
 package mocks;
 
-import com.example.spotifyubershuffle.HttpAdapter.HttpAdapter;
+import com.example.spotifyubershuffle.httpAdapter.HttpAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 public class HttpAdapterMock implements HttpAdapter {
     @Override

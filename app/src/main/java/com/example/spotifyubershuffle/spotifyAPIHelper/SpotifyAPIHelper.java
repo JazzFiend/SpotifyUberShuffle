@@ -1,4 +1,4 @@
-package com.example.spotifyubershuffle.SpotifyAPIHelper;
+package com.example.spotifyubershuffle.spotifyAPIHelper;
 
 import java.util.Collection;
 import java.util.List;

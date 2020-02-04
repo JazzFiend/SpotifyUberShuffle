@@ -1,8 +1,8 @@
 package com.example.spotifyubershuffle;
 
-import com.example.spotifyubershuffle.HttpAdapter.HttpAdapter;
-import com.example.spotifyubershuffle.SpotifyAPIHelper.SpotifyAPIHelper;
-import com.example.spotifyubershuffle.SpotifyAPIHelper.SpotifyAPIHelperImpl;
+import com.example.spotifyubershuffle.httpAdapter.HttpAdapter;
+import com.example.spotifyubershuffle.spotifyAPIHelper.SpotifyAPIHelper;
+import com.example.spotifyubershuffle.spotifyAPIHelper.SpotifyAPIHelperImpl;
 
 import org.junit.Before;
 import org.junit.Test;

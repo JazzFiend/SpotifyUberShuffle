@@ -1,4 +1,4 @@
-package com.example.spotifyubershuffle.HttpAdapter;
+package com.example.spotifyubershuffle.httpAdapter;
 
 import org.json.JSONObject;
 

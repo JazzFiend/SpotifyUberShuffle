@@ -1,4 +1,4 @@
-package com.example.spotifyubershuffle.Exceptions;
+package com.example.spotifyubershuffle.exceptions;
 
 public class ShuffleException extends Exception {
     public ShuffleException(String message) {

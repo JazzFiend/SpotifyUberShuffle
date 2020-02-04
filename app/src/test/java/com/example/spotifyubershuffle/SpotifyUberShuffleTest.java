@@ -1,6 +1,6 @@
 package com.example.spotifyubershuffle;
 
-import com.example.spotifyubershuffle.Exceptions.ShuffleException;
+import com.example.spotifyubershuffle.exceptions.ShuffleException;
 
 import org.junit.Test;
 
@@ -34,7 +34,7 @@ public class SpotifyUberShuffleTest {
         initializeUberShuffle();
 
         uberShuffle.populateLibrary();
-        assertEquals("PlaylistSnapshot", uberShuffle.createShufflePlaylist("userID", 3));
+        assertEquals("Playlist ID", uberShuffle.createShufflePlaylist("userID", 3));
     }
 
     private void initializeUberShuffle() {

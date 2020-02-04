@@ -1,4 +1,4 @@
-package com.example.spotifyubershuffle.SpotifyIdExtractor;
+package com.example.spotifyubershuffle.spotifyIdExtractor;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -7,16 +7,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrackIdFromAlbumExtractor extends SpotifyIdExtractor {
+public class AlbumIdExtractor extends SpotifyIdExtractor {
     @Override
     public List<String> extractIDs(JSONObject response) throws JSONException {
-        List<String> trackIdList = new ArrayList<>();
+        List<String> albumIdList = new ArrayList<>();
         JSONArray itemArray = response.getJSONArray("items");
         for (int i = 0; i < itemArray.length(); i++) {
             JSONObject item = itemArray.getJSONObject(i);
-            String id = item.getString("id");
-            trackIdList.add(id);
+            JSONObject album = item.getJSONObject("album");
+            String id = album.getString("id");
+            albumIdList.add(id);
         }
-        return trackIdList;
+        return albumIdList;
     }
 }

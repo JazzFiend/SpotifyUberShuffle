@@ -1,4 +1,4 @@
-package com.example.spotifyubershuffle.SpotifyIdExtractor;
+package com.example.spotifyubershuffle.spotifyIdExtractor;
 
 import org.json.JSONException;
 import org.json.JSONObject;

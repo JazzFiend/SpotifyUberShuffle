@@ -1,6 +1,6 @@
-package com.example.spotifyubershuffle.IdExtractorTests;
+package com.example.spotifyubershuffle.idExtractorTests;
 
-import com.example.spotifyubershuffle.SpotifyIdExtractor.TrackIdFromAlbumExtractor;
+import com.example.spotifyubershuffle.spotifyIdExtractor.TrackIdExtractor;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,17 +11,17 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class AlbumIdExtractorTest {
+public class TrackIdExtractorTest {
     @Test
     public void extractId() throws JSONException {
-        String trackResponse = "{\"items\": [{\"id\": \"123\"},{\"id\": \"abc\"},{\"id\": \"987\"}]}";
+        String trackResponse = "{\"items\": [{\"track\": {\"id\": \"123\"}},{\"track\": {\"id\": \"abc\"}},{\"track\": {\"id\": \"987\"}}]}";
         JSONObject trackResponseJson = new JSONObject(trackResponse);
         List<String> extractedIds = new ArrayList<>();
         extractedIds.add("123");
         extractedIds.add("abc");
         extractedIds.add("987");
 
-        TrackIdFromAlbumExtractor extractor = new TrackIdFromAlbumExtractor();
+        TrackIdExtractor extractor = new TrackIdExtractor();
         List<String> underTest = extractor.extractIDs(trackResponseJson);
 
         assertEquals(underTest, extractedIds);
