@@ -2,8 +2,8 @@ package com.example.spotifyubershuffle;
 
 import androidx.annotation.VisibleForTesting;
 
-import com.example.spotifyubershuffle.Exceptions.ShuffleException;
-import com.example.spotifyubershuffle.SpotifyAPIHelper.SpotifyAPIHelper;
+import com.example.spotifyubershuffle.exceptions.ShuffleException;
+import com.example.spotifyubershuffle.spotifyAPIHelper.SpotifyAPIHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +30,8 @@ public class SpotifyUberShuffle {
     public String createShufflePlaylist(String userId, int trackCount) throws ShuffleException {
         List<String> shuffledSongIds = shuffle(trackCount);
         String playlistId = spotifyAPIHelper.createPlaylist("UberShuffle", "UberShuffle", false, userId);
-        return spotifyAPIHelper.addToPlaylist(playlistId, shuffledSongIds);
+        spotifyAPIHelper.addToPlaylist(playlistId, shuffledSongIds);
+        return playlistId;
     }
 
     @VisibleForTesting

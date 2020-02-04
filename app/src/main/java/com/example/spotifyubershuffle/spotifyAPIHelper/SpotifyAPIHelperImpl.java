@@ -1,10 +1,10 @@
-package com.example.spotifyubershuffle.SpotifyAPIHelper;
+package com.example.spotifyubershuffle.spotifyAPIHelper;
 
-import com.example.spotifyubershuffle.HttpAdapter.HttpAdapter;
-import com.example.spotifyubershuffle.SpotifyIdExtractor.AlbumIdExtractor;
-import com.example.spotifyubershuffle.SpotifyIdExtractor.SpotifyIdExtractor;
-import com.example.spotifyubershuffle.SpotifyIdExtractor.TrackIdExtractor;
-import com.example.spotifyubershuffle.SpotifyIdExtractor.TrackIdFromAlbumExtractor;
+import com.example.spotifyubershuffle.httpAdapter.HttpAdapter;
+import com.example.spotifyubershuffle.spotifyIdExtractor.AlbumIdExtractor;
+import com.example.spotifyubershuffle.spotifyIdExtractor.SpotifyIdExtractor;
+import com.example.spotifyubershuffle.spotifyIdExtractor.TrackIdExtractor;
+import com.example.spotifyubershuffle.spotifyIdExtractor.TrackIdFromAlbumExtractor;
 
 import org.json.JSONException;
 import org.json.JSONObject;

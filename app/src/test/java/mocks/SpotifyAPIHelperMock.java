@@ -1,6 +1,6 @@
 package mocks;
 
-import com.example.spotifyubershuffle.SpotifyAPIHelper.SpotifyAPIHelper;
+import com.example.spotifyubershuffle.spotifyAPIHelper.SpotifyAPIHelper;
 
 import java.util.Collection;
 import java.util.HashSet;
