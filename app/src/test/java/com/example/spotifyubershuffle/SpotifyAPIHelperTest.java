@@ -1,6 +1,6 @@
 package com.example.spotifyubershuffle;
 
-import com.example.spotifyubershuffle.httpAdapter.HttpAdapter;
+import com.example.spotifyubershuffle.httpAdapter.HttpRequestAdapter;
 import com.example.spotifyubershuffle.spotifyAPIHelper.SpotifyAPIHelper;
 import com.example.spotifyubershuffle.spotifyAPIHelper.SpotifyAPIHelperImpl;
 
@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import mocks.HttpAdapterMock;
+import mocks.HttpRequestAdapterMock;
 
 import static org.junit.Assert.*;
 
@@ -21,7 +21,7 @@ public class SpotifyAPIHelperTest {
 
     @Before
     public void globalSetup() {
-        HttpAdapter httpTest = new HttpAdapterMock();
+        HttpRequestAdapter httpTest = new HttpRequestAdapterMock();
         apiHelper = new SpotifyAPIHelperImpl(httpTest);
     }
 

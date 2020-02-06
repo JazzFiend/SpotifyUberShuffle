@@ -10,8 +10,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.spotifyubershuffle.exceptions.ShuffleException;
-import com.example.spotifyubershuffle.httpAdapter.HttpAdapter;
-import com.example.spotifyubershuffle.httpAdapter.HttpAdapterVolleyImpl;
+import com.example.spotifyubershuffle.httpAdapter.HttpRequestAdapter;
+import com.example.spotifyubershuffle.httpAdapter.HttpRequestAdapterImpl;
+import com.example.spotifyubershuffle.httpAdapter.HttpVollyRequestSender;
 import com.example.spotifyubershuffle.spotifyAPIHelper.SpotifyAPIHelper;
 import com.example.spotifyubershuffle.spotifyAPIHelper.SpotifyAPIHelperImpl;
 
@@ -32,11 +33,11 @@ public class MainActivity extends AppCompatActivity {
         new AsyncUberShuffle().execute(args);
     }
 
-    private static class AsyncUberShuffle extends AsyncTask<UberShuffleArgs, Void, String> {
+    private class AsyncUberShuffle extends AsyncTask<UberShuffleArgs, Void, String> {
         @Override
         protected String doInBackground(UberShuffleArgs... args) {
             try {
-                HttpAdapter http = new HttpAdapterVolleyImpl(args[0].getAccessToken());
+                HttpRequestAdapter http = new HttpRequestAdapterImpl(new HttpVollyRequestSender(args[0].getAccessToken()));
                 SpotifyAPIHelper spotifyAPIHelper = new SpotifyAPIHelperImpl(http);
                 SpotifyUberShuffle shuffler = new SpotifyUberShuffle(spotifyAPIHelper);
                 shuffler.populateLibrary();

@@ -1,6 +1,6 @@
 package mocks;
 
-import com.example.spotifyubershuffle.httpAdapter.HttpAdapter;
+import com.example.spotifyubershuffle.httpAdapter.HttpRequestAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpAdapterMock implements HttpAdapter {
+public class HttpRequestAdapterMock implements HttpRequestAdapter {
     @Override
     public JSONObject makeGetRequest(String url) {
         String getFavoriteTrackResponse1 = "{\"items\": [{\"track\": {\"id\": \"123\"}},{\"track\": {\"id\": \"abc\"}}],\"next\": \"sendFavoriteTrackResponse2\"}";
