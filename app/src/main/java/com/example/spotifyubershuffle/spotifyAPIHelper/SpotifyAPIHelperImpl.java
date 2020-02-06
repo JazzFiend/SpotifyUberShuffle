@@ -1,6 +1,6 @@
 package com.example.spotifyubershuffle.spotifyAPIHelper;
 
-import com.example.spotifyubershuffle.httpAdapter.HttpAdapter;
+import com.example.spotifyubershuffle.httpAdapter.HttpRequestAdapter;
 import com.example.spotifyubershuffle.spotifyIdExtractor.AlbumIdExtractor;
 import com.example.spotifyubershuffle.spotifyIdExtractor.SpotifyIdExtractor;
 import com.example.spotifyubershuffle.spotifyIdExtractor.TrackIdExtractor;
@@ -17,10 +17,10 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class SpotifyAPIHelperImpl implements SpotifyAPIHelper {
-    private final HttpAdapter httpAdapter;
+    private final HttpRequestAdapter httpRequestAdapter;
 
-    public SpotifyAPIHelperImpl(HttpAdapter httpAdapter) {
-        this.httpAdapter = httpAdapter;
+    public SpotifyAPIHelperImpl(HttpRequestAdapter httpRequestAdapter) {
+        this.httpRequestAdapter = httpRequestAdapter;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class SpotifyAPIHelperImpl implements SpotifyAPIHelper {
         Map<String, String> bodyParams = constructBodyParams(playlistName, playlistDescription, isPublic);
 
         try {
-            JSONObject response = httpAdapter.makePostRequest(url, bodyParams);
+            JSONObject response = httpRequestAdapter.makePostRequest(url, bodyParams);
             return response.getString("id");
         } catch(InterruptedException | ExecutionException | JSONException e) {
             throw new RuntimeException(e);
@@ -81,7 +81,7 @@ public class SpotifyAPIHelperImpl implements SpotifyAPIHelper {
         try {
             for(String songID : songList) {
                 String urlWithTrackID = url + songID;
-                JSONObject response = httpAdapter.makePostRequest(urlWithTrackID);
+                JSONObject response = httpRequestAdapter.makePostRequest(urlWithTrackID);
                 playListSnapshot = response.getString("snapshot_id");
             }
         } catch(InterruptedException | ExecutionException | JSONException e) {
@@ -96,7 +96,7 @@ public class SpotifyAPIHelperImpl implements SpotifyAPIHelper {
 
         while(!nextUrlRequest.equals("null")) {
             try {
-                JSONObject response = httpAdapter.makeGetRequest(nextUrlRequest);
+                JSONObject response = httpRequestAdapter.makeGetRequest(nextUrlRequest);
                 nextUrlRequest = response.getString("next");
                 List<String> trackIdList = idExtractor.extractIDs(response);
                 trackIdSet.addAll(trackIdList);

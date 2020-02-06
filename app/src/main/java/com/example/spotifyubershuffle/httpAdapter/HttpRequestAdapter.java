@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public interface HttpAdapter {
+public interface HttpRequestAdapter {
     JSONObject makeGetRequest(String url) throws InterruptedException, ExecutionException;
 
     JSONObject makePostRequest(String url) throws InterruptedException, ExecutionException;
