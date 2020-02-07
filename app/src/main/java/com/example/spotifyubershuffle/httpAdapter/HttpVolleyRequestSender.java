@@ -13,11 +13,11 @@ import java.util.concurrent.ExecutionException;
 
 import static com.example.spotifyubershuffle.App.getContext;
 
-public class HttpVollyRequestSender implements HttpRequestSender {
+public class HttpVolleyRequestSender implements HttpRequestSender {
     private final String accessToken;
     private final RequestQueue requestQueue;
 
-    public HttpVollyRequestSender(String accessToken) {
+    public HttpVolleyRequestSender(String accessToken) {
         this.accessToken = accessToken;
         this.requestQueue = Volley.newRequestQueue(getContext());
     }
