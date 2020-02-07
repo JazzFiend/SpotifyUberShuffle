@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">SpotifyUberShuffle</string>
     <string name="ubershuffle">UberShuffle</string>
-    <string name="accesstoken">Access Token</string>
-    <string name="username">Username</string>
+    <string name="accesstoken">Bearer BQBIZlDU7-p8szr7406SGSnNrFtnazvvkkYAZOxlINs7LefMdx6UPQzg4tTB61ib8VXfU48qiKZcmwzxzdvmI7Eefsf3luIMbAvYZHr5OzhkMuRXNmYIVv8Ou4ktA6vSwJR5K2fpmsbtJkiCE-fulff_NvFjnJZHtpMxKtkVuzBuSjlnu-lYmKnwg_WbAVpYe3UgVBn2dsjAmyqq-6HYbtsZJIApTYt-wmmUL0qpG72W</string>
+    <string name="username">jazzfiend7</string>
     <string name="number_tracks_detail">Number of tracks in playlist</string>
     <string name="playlist_size_default">10</string>
 </resources>

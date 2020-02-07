@@ -55,6 +55,6 @@ public class HttpRequestAdapterImpl implements HttpRequestAdapter {
 
     private void sleepBasedOnRetry(ClientError clientError) throws InterruptedException {
         int secondsToSleep = Integer.parseInt(clientError.networkResponse.headers.get("Retry-After"));
-        Thread.sleep(secondsToSleep * 1000 + 250);
+        Thread.sleep(secondsToSleep * 1000);
     }
 }

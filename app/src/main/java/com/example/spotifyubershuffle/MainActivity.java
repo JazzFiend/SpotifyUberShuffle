@@ -1,7 +1,5 @@
 package com.example.spotifyubershuffle;
 
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -9,12 +7,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.spotifyubershuffle.exceptions.ShuffleException;
-import com.example.spotifyubershuffle.httpAdapter.HttpRequestAdapter;
-import com.example.spotifyubershuffle.httpAdapter.HttpRequestAdapterImpl;
-import com.example.spotifyubershuffle.httpAdapter.HttpVollyRequestSender;
-import com.example.spotifyubershuffle.spotifyAPIHelper.SpotifyAPIHelper;
-import com.example.spotifyubershuffle.spotifyAPIHelper.SpotifyAPIHelperImpl;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 //TODO: Need to break private class out to make it more testable.
 public class MainActivity extends AppCompatActivity {
@@ -24,38 +19,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void uberShuffle(View view) {
+    public void uberShuffle(View view) throws InterruptedException, ExecutionException, TimeoutException {
         //TODO: Need to login instead hardcoding token.
         String accessToken = ((EditText)findViewById(R.id.editText_accessToken)).getText().toString();
         String username = ((EditText)findViewById(R.id.editText_username)).getText().toString();
         int playlistSize = Integer.parseInt(((EditText)findViewById(R.id.editText_trackNum)).getText().toString());
         UberShuffleArgs args = new UberShuffleArgs(accessToken, username, playlistSize);
-        new AsyncUberShuffle().execute(args);
-    }
-
-    private class AsyncUberShuffle extends AsyncTask<UberShuffleArgs, Void, String> {
-        @Override
-        protected String doInBackground(UberShuffleArgs... args) {
-            try {
-                HttpRequestAdapter http = new HttpRequestAdapterImpl(new HttpVollyRequestSender(args[0].getAccessToken()));
-                SpotifyAPIHelper spotifyAPIHelper = new SpotifyAPIHelperImpl(http);
-                SpotifyUberShuffle shuffler = new SpotifyUberShuffle(spotifyAPIHelper);
-                shuffler.populateLibrary();
-                return shuffler.createShufflePlaylist(args[0].getUsername(), args[0].getPlaylistSize());
-            } catch (ShuffleException e) {
-                ShuffleException shuffleException = e;
-            }
-            return "";
-        }
-
-        //TODO: Need to handle 400 and 401 codes gracefully
-        protected void onPostExecute(String playlistId) {
-            Context context = getApplicationContext();
-            CharSequence text = String.format("Playlist Successfully Created!\nID: %s", playlistId);
-            int duration = Toast.LENGTH_LONG;
-
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
-        }
+        AsyncUberShuffle uberShuffle = new AsyncUberShuffle(getApplicationContext(), accessToken);
+        uberShuffle.execute(args);
+        CharSequence text = String.format("Playlist Successfully Created!\nID: %s", uberShuffle.get(5, TimeUnit.MINUTES));
+        Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+        toast.show();
     }
 }

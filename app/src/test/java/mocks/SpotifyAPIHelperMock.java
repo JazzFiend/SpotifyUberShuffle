@@ -42,7 +42,7 @@ public class SpotifyAPIHelperMock implements SpotifyAPIHelper {
     @Override
     public String createPlaylist(String playlistName, String playlistDescription, boolean isPublic, String userId) {
         if(!userId.equals("userID")) {
-            throw new RuntimeException(String.format("User Id is not as expected. Expected \"userId\", Recieved %s", userId));
+            throw new RuntimeException(String.format("User Id is not as expected. Expected \"userID\", Recieved %s", userId));
         }
         return "Playlist ID";
     }
