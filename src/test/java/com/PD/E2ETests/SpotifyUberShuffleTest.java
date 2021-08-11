@@ -15,7 +15,7 @@ public class SpotifyUberShuffleTest {
     @Test
     @Ignore
     public void endToEndTest() throws ShuffleException {
-        final String accessToken = "Bearer BQDVo4Irf0is_nXipdDDyAaR2of0MGtCTbT_IwrLhCSJ7HqanjV9CLAZhkwNsJxQHoEpNVwk15MvEGPqo2TAis_JIVg1w5cOCMbK5uk5oHkWbelHDo7rcCsQi3Nl0VnRbWzfIU1haT5NdI_XNRIYzHPs8oRgq1qobjhB1tXKzVxdlac-CtBFzVdyifSVtYJi-zayZQcp5mTaqlI6eHfz9dAstF1T9nsUPb6B12MSlhnA";
+        final String accessToken = "Bearer ";
         final String USER_ID = "jazzFiend7";
         final int PLAYLIST_SIZE = 50;
 
