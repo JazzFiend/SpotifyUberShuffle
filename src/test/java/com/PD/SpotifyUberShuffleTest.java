@@ -7,6 +7,7 @@ import java.util.HashSet;
 
 import com.PD.exceptions.ShuffleException;
 import com.PD.mocks.SpotifyAPIHelperMock;
+
 import org.junit.Test;
 
 public class SpotifyUberShuffleTest {
