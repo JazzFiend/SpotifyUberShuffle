@@ -2,6 +2,7 @@ package com.PD;
 
 import static org.junit.Assert.assertEquals;
 
+import com.PD.model.SpotifyUberShuffle;
 import java.util.Collection;
 import java.util.HashSet;
 

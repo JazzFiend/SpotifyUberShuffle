@@ -1,10 +1,10 @@
-package com.PD.spotifyApiHelper;
+package com.PD.model.spotifyApiHelper;
 
-import com.PD.httpAdapter.HttpRequestAdapter;
-import com.PD.spotifyIdExtractor.AlbumIdExtractor;
-import com.PD.spotifyIdExtractor.SpotifyIdExtractor;
-import com.PD.spotifyIdExtractor.TrackIdExtractor;
-import com.PD.spotifyIdExtractor.TrackIdFromAlbumExtractor;
+import com.PD.model.httpAdapter.HttpRequestAdapter;
+import com.PD.model.spotifyIdExtractor.AlbumIdExtractor;
+import com.PD.model.spotifyIdExtractor.SpotifyIdExtractor;
+import com.PD.model.spotifyIdExtractor.TrackIdExtractor;
+import com.PD.model.spotifyIdExtractor.TrackIdFromAlbumExtractor;
 import org.json.JSONException;
 import org.json.JSONObject;
 

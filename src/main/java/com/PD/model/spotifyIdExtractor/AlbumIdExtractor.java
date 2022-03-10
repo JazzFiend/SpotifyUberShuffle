@@ -1,4 +1,4 @@
-package com.PD.spotifyIdExtractor;
+package com.PD.model.spotifyIdExtractor;
 
 import org.json.JSONArray;
 import org.json.JSONException;

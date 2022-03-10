@@ -1,4 +1,4 @@
-package com.PD.httpAdapter;
+package com.PD.model.httpAdapter;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

@@ -1,6 +1,6 @@
 package com.PD.mocks;
 
-import com.PD.httpAdapter.HttpCaller;
+import com.PD.model.httpAdapter.HttpCaller;
 import okhttp3.Request;
 import org.json.JSONObject;
 import org.json.*;

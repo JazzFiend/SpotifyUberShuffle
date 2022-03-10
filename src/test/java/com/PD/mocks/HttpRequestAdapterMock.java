@@ -1,6 +1,6 @@
 package com.PD.mocks;
 
-import com.PD.httpAdapter.HttpRequestAdapter;
+import com.PD.model.httpAdapter.HttpRequestAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
