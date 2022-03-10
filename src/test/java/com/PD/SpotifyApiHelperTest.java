@@ -1,9 +1,9 @@
 package com.PD;
 
-import com.PD.httpAdapter.HttpRequestAdapter;
+import com.PD.model.httpAdapter.HttpRequestAdapter;
 import com.PD.mocks.HttpRequestAdapterMock;
-import com.PD.spotifyApiHelper.SpotifyApiHelper;
-import com.PD.spotifyApiHelper.SpotifyApiHelperImpl;
+import com.PD.model.spotifyApiHelper.SpotifyApiHelper;
+import com.PD.model.spotifyApiHelper.SpotifyApiHelperImpl;
 import org.junit.Before;
 import org.junit.Test;
 

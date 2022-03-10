@@ -1,7 +1,7 @@
-package com.PD;
+package com.PD.model;
 
 import com.PD.exceptions.ShuffleException;
-import com.PD.spotifyApiHelper.SpotifyApiHelper;
+import com.PD.model.spotifyApiHelper.SpotifyApiHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;

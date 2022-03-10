@@ -1,6 +1,6 @@
 package com.PD.idExtractorTests;
 
-import com.PD.spotifyIdExtractor.TrackIdExtractor;
+import com.PD.model.spotifyIdExtractor.TrackIdExtractor;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;

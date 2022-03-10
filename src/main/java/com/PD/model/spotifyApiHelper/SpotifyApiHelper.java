@@ -1,4 +1,4 @@
-package com.PD.spotifyApiHelper;
+package com.PD.model.spotifyApiHelper;
 
 import java.util.Collection;
 import java.util.List;
