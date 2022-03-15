@@ -10,9 +10,11 @@ import java.io.IOException;
 public class OkHttpCaller implements HttpCaller {
     private final OkHttpClient http;
 
+    // TODO: OkHttpCaller is meant for Java Android. Find a better package to use.
     public OkHttpCaller() {
         this.http = new OkHttpClient();
     }
+
     @Override
     public JSONObject makeRequest(Request request) {
         int retryCountMax = 5;
