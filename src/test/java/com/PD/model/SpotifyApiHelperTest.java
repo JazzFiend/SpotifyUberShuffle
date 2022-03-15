@@ -1,4 +1,4 @@
-package com.PD;
+package com.PD.model;
 
 import com.PD.model.httpAdapter.HttpRequestAdapter;
 import com.PD.mocks.HttpRequestAdapterMock;

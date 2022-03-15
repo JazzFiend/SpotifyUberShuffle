@@ -1,4 +1,4 @@
-package com.PD;
+package com.PD.model;
 
 import static org.junit.Assert.assertEquals;
 

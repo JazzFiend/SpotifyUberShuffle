@@ -7,12 +7,13 @@ import com.PD.model.httpAdapter.OkHttpCaller;
 import com.PD.model.httpAdapter.OkHttpHttpRequestAdapter;
 import com.PD.model.spotifyApiHelper.SpotifyApiHelper;
 import com.PD.model.spotifyApiHelper.SpotifyApiHelperImpl;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SpotifyUberShuffleTest {
 
     @Test
-//    @Ignore
+    @Ignore
     public void endToEndTest() throws ShuffleException {
         final String accessToken = "Bearer BQBDGB9ig-pDkMsp_laI0_A5hHniD3V53MPwAZNaPR9HoGhX9hcOLanWxfZ2_yjtrpV-Hv117mPNsWyqug2LZ1qLjvmHnGFSlZts34njutN47FMKMnxKsxzjE9xgInmH8x6g5mUI3aObeBNjyhD94q0HdnflQpZwsXL_GFqI-FT92VLUDIEqGa6jL7KClb-ofky8Dh0xwZkB_wNJjJ23jdAvXyOHj2gEJECWUEv3AhbV6Bg";
         final String USER_ID = "jazzFiend7";
