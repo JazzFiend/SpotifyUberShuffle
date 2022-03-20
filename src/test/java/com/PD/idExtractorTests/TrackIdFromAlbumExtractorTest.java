@@ -1,14 +1,13 @@
 package com.PD.idExtractorTests;
 
-import com.PD.model.spotifyIdExtractor.AlbumIdExtractor;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.PD.model.spotifyIdExtractor.AlbumIdExtractor;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.junit.jupiter.api.Test;
 
 public class TrackIdFromAlbumExtractorTest {
     @Test

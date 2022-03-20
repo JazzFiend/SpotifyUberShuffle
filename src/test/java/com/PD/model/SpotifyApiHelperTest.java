@@ -1,23 +1,23 @@
 package com.PD.model;
 
-import com.PD.model.httpAdapter.HttpRequestAdapter;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.PD.mocks.HttpRequestAdapterMock;
+import com.PD.model.httpAdapter.HttpRequestAdapter;
 import com.PD.model.spotifyApiHelper.SpotifyApiHelper;
 import com.PD.model.spotifyApiHelper.SpotifyApiHelperImpl;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SpotifyApiHelperTest {
         private SpotifyApiHelper apiHelper;
 
-    @Before
+    @BeforeEach
     public void globalSetup() {
         HttpRequestAdapter httpTest = new HttpRequestAdapterMock();
         apiHelper = new SpotifyApiHelperImpl(httpTest);
@@ -50,9 +50,9 @@ public class SpotifyApiHelperTest {
         assertEquals("Playlist ID", playlistId);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void createPlaylistExceptionTest() {
-        apiHelper.createPlaylist("Playlist Name", "Playlist Description", true, "InterruptedException");
+        assertThrows(RuntimeException.class, () -> apiHelper.createPlaylist("Playlist Name", "Playlist Description", true, "InterruptedException"));
     }
 
     @Test
@@ -63,10 +63,10 @@ public class SpotifyApiHelperTest {
         assertEquals("PlaylistSnapshot", playlistState);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void addToPlaylistExceptionTest() {
         List<String> songList = new ArrayList<>();
         songList.add("Exception");
-        apiHelper.addToPlaylist("PlaylistId", songList);
+        assertThrows(RuntimeException.class, () -> apiHelper.addToPlaylist("PlaylistId", songList));
     }
 }
