@@ -1,15 +1,13 @@
 package com.PD.model;
 
-import static org.junit.Assert.assertEquals;
-
-import com.PD.model.SpotifyUberShuffle;
-import java.util.Collection;
-import java.util.HashSet;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.PD.exceptions.ShuffleException;
 import com.PD.mocks.SpotifyAPIHelperMock;
-
-import org.junit.Test;
+import java.util.Collection;
+import java.util.HashSet;
+import org.junit.jupiter.api.Test;
 
 public class SpotifyUberShuffleTest {
     private SpotifyUberShuffle uberShuffle;
@@ -23,10 +21,11 @@ public class SpotifyUberShuffleTest {
         assertEquals(expectedLibrary, uberShuffle.getTrackLibrary());
     }
 
-    @Test(expected = ShuffleException.class)
+    @Test
     public void createShufflePlaylistEmptyLibraryTest() throws ShuffleException {
         SpotifyUberShuffle uberShuffle = new SpotifyUberShuffle(new SpotifyAPIHelperMock());
-        uberShuffle.createShufflePlaylist("userID", 5);
+        assertThrows(ShuffleException.class, () ->
+            uberShuffle.createShufflePlaylist("userID", 5));
     }
 
     @Test

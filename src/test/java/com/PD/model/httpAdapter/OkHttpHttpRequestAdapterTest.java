@@ -1,17 +1,14 @@
 package com.PD.model.httpAdapter;
 
-import com.PD.mocks.OkHttpCallerMock;
-import com.PD.model.httpAdapter.HttpRequestAdapter;
-import com.PD.model.httpAdapter.OkHttpHttpRequestAdapter;
-import org.json.JSONObject;
-import org.json.JSONWriter;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.PD.mocks.OkHttpCallerMock;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
+import org.json.JSONObject;
+import org.json.JSONWriter;
+import org.junit.jupiter.api.Test;
 
 public class OkHttpHttpRequestAdapterTest {
     private final String accessToken = "Bearer 123";
