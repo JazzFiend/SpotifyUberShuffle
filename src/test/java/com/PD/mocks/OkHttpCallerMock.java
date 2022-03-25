@@ -1,11 +1,10 @@
 package com.PD.mocks;
 
 import com.PD.model.httpAdapter.HttpCaller;
+import java.io.StringWriter;
 import okhttp3.Request;
 import org.json.JSONObject;
-import org.json.*;
-
-import java.io.StringWriter;
+import org.json.JSONWriter;
 
 public class OkHttpCallerMock implements HttpCaller {
 
@@ -15,7 +14,7 @@ public class OkHttpCallerMock implements HttpCaller {
         new JSONWriter(sw)
                 .object()
                 .key("Authorization")
-                .value(request.headers().get("Authorization").toString())
+                .value(request.headers().get("Authorization"))
                 .key("url")
                 .value(request.url().toString())
                 .key("method")

@@ -42,7 +42,7 @@ public class SpotifyAPIHelperMock implements SpotifyApiHelper {
     @Override
     public String createPlaylist(String playlistName, String playlistDescription, boolean isPublic, String userId) {
         if(!userId.equals("userID")) {
-            throw new RuntimeException(String.format("User Id is not as expected. Expected \"userId\", Recieved %s", userId));
+            throw new RuntimeException(String.format("User Id is not as expected. Expected \"userId\", Received %s", userId));
         }
         return "Playlist ID";
     }
@@ -51,7 +51,7 @@ public class SpotifyAPIHelperMock implements SpotifyApiHelper {
     @Override
     public String addToPlaylist(String playlistId, List<String> songList) {
         if(!playlistId.equals("Playlist ID")) {
-            throw new RuntimeException(String.format("Playlist ID is not as expected. Expected \"Playlist ID\", Recieved %s", playlistId));
+            throw new RuntimeException(String.format("Playlist ID is not as expected. Expected \"Playlist ID\", Received %s", playlistId));
         }
         if(songList.isEmpty()) {
             throw new RuntimeException("Song list must have at least one entry.");

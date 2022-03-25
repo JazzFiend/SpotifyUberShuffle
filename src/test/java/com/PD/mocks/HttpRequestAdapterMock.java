@@ -35,7 +35,7 @@ public class HttpRequestAdapterMock implements HttpRequestAdapter {
                     throw new RuntimeException("Bad Test URL Seen");
             }
         } catch(JSONException e) {
-            // Returning null here. The test data is correct and shouldn't change much so we shouldn't throw a JSON Exception.
+            // Returning null here. The test data is correct and shouldn't change much, so we shouldn't throw a JSON Exception.
             // If we do, then the null will cause a null pointer exception.
             return null;
         }
@@ -43,7 +43,7 @@ public class HttpRequestAdapterMock implements HttpRequestAdapter {
 
     @Override
     public JSONObject makePostRequest(String url) {
-        return makePostRequest(url, new HashMap<String, String>());
+        return makePostRequest(url, new HashMap<>());
     }
 
     @Override
@@ -59,7 +59,7 @@ public class HttpRequestAdapterMock implements HttpRequestAdapter {
                     throw new RuntimeException("Bad Test URL Seen");
             }
         } catch(JSONException e) {
-            // Returning null here. The test data is correct and shouldn't change much so we shouldn't throw a JSON Exception.
+            // Returning null here. The test data is correct and shouldn't change much, so we shouldn't throw a JSON Exception.
             // If we do, then the null will cause a null pointer exception.
             return null;
         }
