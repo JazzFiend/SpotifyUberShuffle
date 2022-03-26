@@ -51,6 +51,6 @@ public class OkHttpCaller implements HttpCaller {
 
     private static void sleepBasedOnRetry(String sleepTime) throws InterruptedException {
         int secondsToSleep = Integer.parseInt(sleepTime);
-        Thread.sleep(secondsToSleep * 1000 + 250);
+        Thread.sleep(secondsToSleep * 1000L + 250);
     }
 }

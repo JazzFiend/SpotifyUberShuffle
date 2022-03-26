@@ -30,7 +30,7 @@ public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
 
     @Override
     public JSONObject makePostRequest(String url) {
-        return makePostRequest(url, new HashMap<String, String>());
+        return makePostRequest(url, new HashMap<>());
     }
 
     @Override
