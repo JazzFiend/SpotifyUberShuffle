@@ -1,56 +1,57 @@
 package com.PD.model.httpAdapter;
 
-import okhttp3.OkHttpClient;
+import java.io.IOException;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONObject;
 
-import java.io.IOException;
-
 public class OkHttpCaller implements HttpCaller {
-    private final OkHttpClient http;
+    private final HumbleOkHttpCaller humbleHttp;
 
-    // TODO: OkHttpCaller is meant for Java Android. Find a better package to use.
-    public OkHttpCaller() {
-        this.http = new OkHttpClient();
+    public OkHttpCaller(HumbleOkHttpCaller humbleHttp) {
+        this.humbleHttp = humbleHttp;
     }
 
     @Override
     public JSONObject makeRequest(Request request) {
         int retryCountMax = 5;
         for (int i = 0; i < retryCountMax; i++) {
-            try (Response response = http.newCall(request).execute()) {
-                String res = response.body().string();
-                JSONObject jsonRes = new JSONObject(res);
-                if (isError(jsonRes)) {
-                    handleError(response, jsonRes);
+            try (Response response = humbleHttp.makeNewCall(request)) {
+                String responseBody = response.body().string();
+                JSONObject jsonRes = new JSONObject(responseBody);
+                if (isErrorPresent(jsonRes)) {
+                    handleResponseError(response, jsonRes);
                 } else {
                     return jsonRes;
                 }
-            } catch (InterruptedException | IOException e) {
+            } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
         }
         throw new RuntimeException("JSON Response was never populated");
     }
 
-    private boolean isError(JSONObject jsonRes) {
+    private boolean isErrorPresent(JSONObject jsonRes) {
         return !jsonRes.isNull("error");
     }
 
-    private void handleError(Response response, JSONObject jsonRes) throws InterruptedException {
-        JSONObject errorJson = (JSONObject) jsonRes.get("error");
-        if ((Integer) errorJson.get("status") == 429) {
+    private void handleResponseError(Response response, JSONObject jsonResponse) {
+        JSONObject error = (JSONObject) jsonResponse.get("error");
+        if ((Integer) error.get("status") == 429) {
             if (response.headers().get("Retry-After") != null) {
                 sleepBasedOnRetry(response.headers().get("Retry-After"));
             }
         } else {
-            throw new RuntimeException(String.format("%s - %s", errorJson.get("status").toString(), errorJson.get("message").toString()));
+            throw new RuntimeException(String.format("%s - %s", error.get("status").toString(), error.get("message").toString()));
         }
     }
 
-    private static void sleepBasedOnRetry(String sleepTime) throws InterruptedException {
+    private static void sleepBasedOnRetry(String sleepTime) {
         int secondsToSleep = Integer.parseInt(sleepTime);
-        Thread.sleep(secondsToSleep * 1000L + 250);
+        try {
+          Thread.sleep(secondsToSleep * 1000L + 250);
+        } catch (InterruptedException e) {
+          System.out.println(e.getMessage());
+        }
     }
 }
