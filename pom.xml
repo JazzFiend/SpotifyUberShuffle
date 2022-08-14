@@ -34,20 +34,32 @@
                 </goals>
             </execution>
         </executions>
-    </plugin>
-    <plugin>
-      <groupId>com.github.spotbugs</groupId>
-      <artifactId>spotbugs-maven-plugin</artifactId>
-      <version>4.7.0.0</version>
-      <dependencies>
-        <!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
-        <dependency>
-          <groupId>com.github.spotbugs</groupId>
-          <artifactId>spotbugs</artifactId>
-          <version>4.7.1</version>
-        </dependency>
-      </dependencies>
-    </plugin>
+      </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>4.7.0.0</version>
+        <dependencies>
+          <!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
+          <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs</artifactId>
+            <version>4.7.1</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.9.4</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-junit5-plugin</artifactId>
+            <version>1.0.0</version>
+          </dependency>
+        </dependencies>
+      </plugin>
     </plugins>
   </build>
   <name>SpotifyUberShuffle</name>
@@ -69,6 +81,12 @@
       <groupId>com.squareup.okhttp3</groupId>
       <artifactId>okhttp</artifactId>
       <version>4.8.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.pitest</groupId>
+      <artifactId>pitest-maven</artifactId>
+      <version>1.9.4</version>
+      <type>maven-plugin</type>
     </dependency>
   </dependencies>
 </project>
