@@ -1,6 +1,6 @@
 package com.PD.mocks;
 
-import com.PD.model.httpAdapter.HttpCaller;
+import com.PD.uberShuffle.httpAdapter.HttpCaller;
 import java.io.StringWriter;
 import okhttp3.Request;
 import org.json.JSONObject;

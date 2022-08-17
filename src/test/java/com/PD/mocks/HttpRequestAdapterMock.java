@@ -1,6 +1,6 @@
 package com.PD.mocks;
 
-import com.PD.model.httpAdapter.HttpRequestAdapter;
+import com.PD.uberShuffle.httpAdapter.HttpRequestAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 

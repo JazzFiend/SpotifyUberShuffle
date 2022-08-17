@@ -1,6 +1,6 @@
 package com.PD.mocks;
 
-import com.PD.model.httpAdapter.HumbleOkHttpCaller;
+import com.PD.uberShuffle.httpAdapter.HumbleOkHttpCaller;
 import java.io.IOException;
 import okhttp3.MediaType;
 import okhttp3.Protocol;

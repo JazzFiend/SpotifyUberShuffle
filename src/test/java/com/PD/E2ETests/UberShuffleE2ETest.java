@@ -1,7 +1,8 @@
 package com.PD.E2ETests;
 
 import com.PD.exceptions.ShuffleException;
-import com.PD.model.SpotifyUberShuffle;
+import com.PD.uberShuffle.SpotifyUberShuffleImpl;
+import com.PD.uberShuffle.model.UberShuffleRequest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +15,7 @@ public class UberShuffleE2ETest {
     final String USER_ID = "jazzFiend7";
     final int PLAYLIST_SIZE = 50;
 
-    SpotifyUberShuffle.beginUberShuffle(accessToken, USER_ID, PLAYLIST_SIZE);
+    SpotifyUberShuffleImpl shuffle = new SpotifyUberShuffleImpl();
+    shuffle.beginUberShuffle(new UberShuffleRequest(accessToken, USER_ID, PLAYLIST_SIZE));
   }
 }
