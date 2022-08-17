@@ -1,6 +1,6 @@
 package com.PD.mocks;
 
-import com.PD.model.spotifyApiHelper.SpotifyApiHelper;
+import com.PD.uberShuffle.spotifyApiHelper.SpotifyApiHelper;
 
 import java.util.Collection;
 import java.util.HashSet;
