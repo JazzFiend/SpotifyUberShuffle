@@ -7,13 +7,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-public class ShufflePlaylistCreator {
+public class SpotifyPlaylistCreatorImpl implements SpotifyPlaylistCreator {
   private final SpotifyApiHelper spotifyAPIHelper;
 
-  public ShufflePlaylistCreator(SpotifyApiHelper spotifyAPIHelper) {
+  public SpotifyPlaylistCreatorImpl(SpotifyApiHelper spotifyAPIHelper) {
     this.spotifyAPIHelper = spotifyAPIHelper;
   }
 
+  @Override
   public String createShufflePlaylist(String userId, int trackCount, Collection<String> trackLibrary) throws ShuffleException {
     List<String> shuffledSongIds = shuffle(trackCount, trackLibrary);
     String playlistId = spotifyAPIHelper.createPlaylist("UberShuffle", "UberShuffle", false, userId);

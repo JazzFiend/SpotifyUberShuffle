@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class SpotifyLibraryTest {
   @Test
   public void populateLibraryTest() {
-    SpotifyLibrary library = new SpotifyLibrary(new SpotifyAPIHelperMock());
+    SpotifyLibraryImpl library = new SpotifyLibraryImpl(new SpotifyAPIHelperMock());
     Collection<String> expectedLibrary = ModelTestHelpers.createDummyLibrary();
 
     library.populateLibrary();

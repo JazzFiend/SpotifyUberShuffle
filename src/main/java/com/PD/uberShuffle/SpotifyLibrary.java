@@ -1,26 +1,10 @@
 package com.PD.uberShuffle;
 
-import com.PD.uberShuffle.spotifyApiHelper.SpotifyApiHelper;
 import java.util.Collection;
-import java.util.HashSet;
 
-public class SpotifyLibrary {
-    private final SpotifyApiHelper spotifyAPIHelper;
-    private final Collection<String> trackLibrary = new HashSet<>();
+// TODO: I may want to rename this class...
+public interface SpotifyLibrary {
+    public Collection<String> populateLibrary();
 
-    public SpotifyLibrary(SpotifyApiHelper spotifyAPIHelper) {
-      this.spotifyAPIHelper = spotifyAPIHelper;
-    }
-
-    public Collection<String> populateLibrary() {
-        Collection<String> trackSet = spotifyAPIHelper.getFavoriteTrackIds();
-        Collection<String> albumTrackSet = spotifyAPIHelper.getTrackIdsFromFavoriteAlbums();
-        trackLibrary.addAll(trackSet);
-        trackLibrary.addAll(albumTrackSet);
-        return trackLibrary;
-    }
-
-    public Collection<String> getTrackLibrary() { return trackLibrary; }
+    public Collection<String> getTrackLibrary();
 }
-
-
