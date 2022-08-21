@@ -1,6 +1,6 @@
 package com.PD.mocks;
 
-import com.PD.uberShuffle.SpotifyLibrary;
+import com.PD.uberShuffle.spotifyLibrary.SpotifyLibrary;
 import java.util.Collection;
 import java.util.HashSet;
 

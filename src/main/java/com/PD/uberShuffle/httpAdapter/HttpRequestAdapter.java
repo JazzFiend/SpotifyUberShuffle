@@ -10,4 +10,6 @@ public interface HttpRequestAdapter {
     JSONObject makePostRequest(String url);
 
     JSONObject makePostRequest(String url, Map<String, String> body);
+
+    void setAccessToken(String accessToken);
 }

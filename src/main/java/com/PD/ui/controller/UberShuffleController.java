@@ -1,7 +1,7 @@
 package com.PD.ui.controller;
 
 import com.PD.exceptions.ShuffleException;
-import com.PD.uberShuffle.SpotifyUberShuffle;
+import com.PD.uberShuffle.spotifyUberShuffle.SpotifyUberShuffle;
 import com.PD.uberShuffle.model.UberShuffleRequest;
 
 public class UberShuffleController {
@@ -11,7 +11,7 @@ public class UberShuffleController {
     this.shuffle = shuffle;
   }
 
-  public void clickUberShuffle(String accessToken, String userId, int playlistSize) throws ShuffleException {
-    shuffle.beginUberShuffle(new UberShuffleRequest(accessToken, userId, playlistSize));
+  public void clickUberShuffle(String userId, int playlistSize) throws ShuffleException {
+    shuffle.beginUberShuffle(new UberShuffleRequest(userId, playlistSize));
   }
 }

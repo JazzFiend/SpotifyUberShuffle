@@ -1,4 +1,4 @@
-package com.PD.uberShuffle;
+package com.PD.uberShuffle.spotifyUberShuffle;
 
 import com.PD.exceptions.ShuffleException;
 import com.PD.uberShuffle.model.UberShuffleRequest;

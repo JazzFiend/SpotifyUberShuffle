@@ -1,7 +1,9 @@
-package com.PD.uberShuffle;
+package com.PD.uberShuffle.spotifyUberShuffle;
 
 import com.PD.exceptions.ShuffleException;
 import com.PD.uberShuffle.model.UberShuffleRequest;
+import com.PD.uberShuffle.spotifyLibrary.SpotifyLibrary;
+import com.PD.uberShuffle.spotifyPlaylistCreator.SpotifyPlaylistCreator;
 import java.util.Collection;
 
 public class SpotifyUberShuffleImpl implements SpotifyUberShuffle {
@@ -14,18 +16,6 @@ public class SpotifyUberShuffleImpl implements SpotifyUberShuffle {
   }
 
   // TODO: This can be tested as an integration test. But I need a mock OkHttpClient before I can do that.
-//  @Override
-//  public void beginUberShuffle(UberShuffleRequest requestInfo) throws ShuffleException {
-//    OkHttpCaller caller = new OkHttpCaller(new HumbleOkHttpCallerImpl());
-//    HttpRequestAdapter http = new OkHttpHttpRequestAdapter(caller, requestInfo.getAccessToken());
-//    SpotifyApiHelper spotifyAPIHelper = new SpotifyApiHelperImpl(http);
-//    ShufflePlaylistCreator shuffler = new ShufflePlaylistCreator(spotifyAPIHelper);
-//    SpotifyLibrary library = new SpotifyLibrary(spotifyAPIHelper);
-//
-//    Collection<String> trackLibrary = library.populateLibrary();
-//    shuffler.createShufflePlaylist(requestInfo.getUserId(), requestInfo.getPlaylistSize(), trackLibrary);
-//  }
-
   @Override
   public void beginUberShuffle(UberShuffleRequest requestInfo) throws ShuffleException {
     Collection<String> trackLibrary = library.populateLibrary();

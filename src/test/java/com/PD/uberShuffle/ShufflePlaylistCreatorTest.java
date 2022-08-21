@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.PD.exceptions.ShuffleException;
 import com.PD.mocks.SpotifyAPIHelperMock;
+import com.PD.uberShuffle.spotifyPlaylistCreator.SpotifyPlaylistCreatorImpl;
 import java.util.HashSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

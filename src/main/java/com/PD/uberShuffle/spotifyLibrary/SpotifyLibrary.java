@@ -1,8 +1,7 @@
-package com.PD.uberShuffle;
+package com.PD.uberShuffle.spotifyLibrary;
 
 import java.util.Collection;
 
-// TODO: I may want to rename this class...
 public interface SpotifyLibrary {
     public Collection<String> populateLibrary();
 

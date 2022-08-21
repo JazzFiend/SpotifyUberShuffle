@@ -1,7 +1,7 @@
 package com.PD.mocks;
 
 import com.PD.exceptions.ShuffleException;
-import com.PD.uberShuffle.SpotifyPlaylistCreator;
+import com.PD.uberShuffle.spotifyPlaylistCreator.SpotifyPlaylistCreator;
 import java.util.Collection;
 
 public class SpotifyPlaylistCreatorSpy implements SpotifyPlaylistCreator {

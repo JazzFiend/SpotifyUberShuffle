@@ -8,8 +8,7 @@ import com.PD.uberShuffle.model.UberShuffleRequest;
 import org.junit.jupiter.api.Test;
 
 class UberShuffleControllerTest {
-  private void assertUberShuffleRequestsEqual(UberShuffleRequest actual, String expectedAccessToken, String expectedUserId, int expectedPlaylistSize) {
-    assertEquals(expectedAccessToken, actual.getAccessToken());
+  private void assertUberShuffleRequestsEqual(UberShuffleRequest actual, String expectedUserId, int expectedPlaylistSize) {
     assertEquals(expectedUserId, actual.getUserId());
     assertEquals(expectedPlaylistSize, actual.getPlaylistSize());
   }
@@ -18,11 +17,10 @@ class UberShuffleControllerTest {
   public void beginsUberShuffle() throws ShuffleException {
     SpotifyUberShuffleSpy shuffleSpy = new SpotifyUberShuffleSpy();
     UberShuffleController controller = new UberShuffleController(shuffleSpy);
-    String accessToken = "AccessToken";
     String userId = "User";
     int playlistSize = 23;
-    controller.clickUberShuffle(accessToken, userId, playlistSize);
+    controller.clickUberShuffle(userId, playlistSize);
     assertEquals(shuffleSpy.beginUberShuffleCount(), 1);
-    assertUberShuffleRequestsEqual(shuffleSpy.lastBeginUberShuffleArgs(), accessToken, userId, playlistSize);
+    assertUberShuffleRequestsEqual(shuffleSpy.lastBeginUberShuffleArgs(), userId, playlistSize);
   }
 }

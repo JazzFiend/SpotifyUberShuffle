@@ -1,4 +1,4 @@
-package com.PD.uberShuffle;
+package com.PD.uberShuffle.spotifyLibrary;
 
 import com.PD.uberShuffle.spotifyApiHelper.SpotifyApiHelper;
 import java.util.Collection;

@@ -6,6 +6,7 @@ import com.PD.exceptions.ShuffleException;
 import com.PD.mocks.SpotifyLibrarySpy;
 import com.PD.mocks.SpotifyPlaylistCreatorSpy;
 import com.PD.uberShuffle.model.UberShuffleRequest;
+import com.PD.uberShuffle.spotifyUberShuffle.SpotifyUberShuffleImpl;
 import org.junit.jupiter.api.Test;
 
 class SpotifyUberShuffleImplTest {
@@ -15,7 +16,7 @@ class SpotifyUberShuffleImplTest {
     SpotifyPlaylistCreatorSpy playlistCreatorSpy = new SpotifyPlaylistCreatorSpy();
 
     SpotifyUberShuffleImpl uberShuffle = new SpotifyUberShuffleImpl(librarySpy, playlistCreatorSpy);
-    uberShuffle.beginUberShuffle(new UberShuffleRequest("Token", "UserId", 10));
+    uberShuffle.beginUberShuffle(new UberShuffleRequest("UserId", 10));
     assertEquals(librarySpy.getPopulateCalls(), 1);
     assertEquals(playlistCreatorSpy.getCreateCalls(), 1);
   }

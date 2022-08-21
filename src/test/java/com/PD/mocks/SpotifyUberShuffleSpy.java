@@ -1,7 +1,7 @@
 package com.PD.mocks;
 
 import com.PD.exceptions.ShuffleException;
-import com.PD.uberShuffle.SpotifyUberShuffle;
+import com.PD.uberShuffle.spotifyUberShuffle.SpotifyUberShuffle;
 import com.PD.uberShuffle.model.UberShuffleRequest;
 
 public class SpotifyUberShuffleSpy implements SpotifyUberShuffle {

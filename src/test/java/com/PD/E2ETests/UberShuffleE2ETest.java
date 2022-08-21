@@ -1,11 +1,11 @@
 package com.PD.E2ETests;
 
 import com.PD.exceptions.ShuffleException;
-import com.PD.uberShuffle.SpotifyLibrary;
-import com.PD.uberShuffle.SpotifyLibraryImpl;
-import com.PD.uberShuffle.SpotifyPlaylistCreator;
-import com.PD.uberShuffle.SpotifyPlaylistCreatorImpl;
-import com.PD.uberShuffle.SpotifyUberShuffleImpl;
+import com.PD.uberShuffle.spotifyLibrary.SpotifyLibrary;
+import com.PD.uberShuffle.spotifyLibrary.SpotifyLibraryImpl;
+import com.PD.uberShuffle.spotifyPlaylistCreator.SpotifyPlaylistCreator;
+import com.PD.uberShuffle.spotifyPlaylistCreator.SpotifyPlaylistCreatorImpl;
+import com.PD.uberShuffle.spotifyUberShuffle.SpotifyUberShuffleImpl;
 import com.PD.uberShuffle.httpAdapter.HttpRequestAdapter;
 import com.PD.uberShuffle.httpAdapter.HumbleOkHttpCallerImpl;
 import com.PD.uberShuffle.httpAdapter.OkHttpCaller;
@@ -25,12 +25,13 @@ public class UberShuffleE2ETest {
     final int playlistSize = 50;
 
     OkHttpCaller caller = new OkHttpCaller(new HumbleOkHttpCallerImpl());
-    HttpRequestAdapter http = new OkHttpHttpRequestAdapter(caller, accessToken);
+    HttpRequestAdapter http = new OkHttpHttpRequestAdapter(caller);
+    http.setAccessToken(accessToken);
     SpotifyApiHelper spotifyAPIHelper = new SpotifyApiHelperImpl(http);
     SpotifyLibrary library = new SpotifyLibraryImpl(spotifyAPIHelper);
     SpotifyPlaylistCreator shuffler = new SpotifyPlaylistCreatorImpl(spotifyAPIHelper);
 
     SpotifyUberShuffleImpl shuffle = new SpotifyUberShuffleImpl(library, shuffler);
-    shuffle.beginUberShuffle(new UberShuffleRequest(accessToken, userId, playlistSize));
+    shuffle.beginUberShuffle(new UberShuffleRequest(userId, playlistSize));
   }
 }

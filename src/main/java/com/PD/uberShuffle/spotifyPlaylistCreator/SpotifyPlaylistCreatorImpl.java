@@ -1,4 +1,4 @@
-package com.PD.uberShuffle;
+package com.PD.uberShuffle.spotifyPlaylistCreator;
 
 import com.PD.exceptions.ShuffleException;
 import com.PD.uberShuffle.spotifyApiHelper.SpotifyApiHelper;
