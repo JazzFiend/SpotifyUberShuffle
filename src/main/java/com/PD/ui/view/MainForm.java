@@ -1,6 +1,7 @@
 package com.PD.ui.view;
 
 import com.PD.exceptions.ShuffleException;
+import com.PD.ui.controller.AccessTokenController;
 import com.PD.ui.controller.GUIErrorController;
 import com.PD.ui.controller.UberShuffleController;
 import java.awt.event.ActionEvent;
@@ -23,12 +24,14 @@ public class MainForm {
   private JLabel playlistSizeError;
   private static JFrame frame;
 
-  private UberShuffleController controller;
+  private UberShuffleController shuffleController;
+  private AccessTokenController tokenController;
 
-  public MainForm(UberShuffleController controller) {
+  public MainForm(UberShuffleController shuffleController, AccessTokenController tokenController) {
     generateUberShufflePlaylistButton.addActionListener(new GenerateUberShufflePlaylistButtonActionListener());
     playlistSizeTextField.addKeyListener(new PlaylistSizeTextFieldKeyListener());
-    this.controller = controller;
+    this.shuffleController = shuffleController;
+    this.tokenController = tokenController;
   }
 
   public void startUi() {
@@ -44,8 +47,8 @@ public class MainForm {
     public void actionPerformed(ActionEvent e) {
       Thread uberShuffleThread = new Thread(() -> {
         try {
-          controller.clickUberShuffle(accessTokenTextField.getText(), userIdTextField.getText(),
-              Integer.parseInt(playlistSizeTextField.getText()));
+          tokenController.setNewAccessToken(accessTokenTextField.getText());
+          shuffleController.clickUberShuffle(userIdTextField.getText(), Integer.parseInt(playlistSizeTextField.getText()));
         } catch (ShuffleException ex) {
           JOptionPane.showMessageDialog(null, ex.getMessage(), "UberShuffle",
               JOptionPane.ERROR_MESSAGE);

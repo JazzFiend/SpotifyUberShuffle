@@ -10,11 +10,11 @@ import java.util.Map;
 
 public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
     private final HttpCaller httpCaller;
-    private final String accessToken;
+    private String accessToken;
 
-    public OkHttpHttpRequestAdapter(HttpCaller httpCaller, String accessToken) {
+    public OkHttpHttpRequestAdapter(HttpCaller httpCaller) {
         this.httpCaller = httpCaller;
-        this.accessToken = accessToken;
+        this.accessToken = "";
     }
 
     @Override
@@ -48,5 +48,10 @@ public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
 
     private JSONObject makeRequest(Request request) {
         return httpCaller.makeRequest(request);
+    }
+
+    @Override
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }

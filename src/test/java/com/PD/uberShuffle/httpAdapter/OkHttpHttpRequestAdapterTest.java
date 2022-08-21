@@ -8,11 +8,18 @@ import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONObject;
 import org.json.JSONWriter;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class OkHttpHttpRequestAdapterTest {
   private final String accessToken = "Bearer 123";
-  private final HttpRequestAdapter http = new OkHttpHttpRequestAdapter(new OkHttpCallerMock(), accessToken);
+  private HttpRequestAdapter http;
+
+  @BeforeEach
+  public void setup() {
+    http = new OkHttpHttpRequestAdapter(new OkHttpCallerMock());
+    http.setAccessToken(accessToken);
+  }
 
   @Test
   public void getRequestTest() {

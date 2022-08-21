@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpRequestAdapterMock implements HttpRequestAdapter {
+    private String accessToken;
+
     @Override
     public JSONObject makeGetRequest(String url) {
         String getFavoriteTrackResponse1 = "{\"items\": [{\"track\": {\"id\": \"123\"}},{\"track\": {\"id\": \"abc\"}}],\"next\": \"sendFavoriteTrackResponse2\"}";
@@ -63,5 +65,14 @@ public class HttpRequestAdapterMock implements HttpRequestAdapter {
             // If we do, then the null will cause a null pointer exception.
             return null;
         }
+    }
+
+    public String getToken() {
+        return accessToken;
+    }
+
+    @Override
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }
