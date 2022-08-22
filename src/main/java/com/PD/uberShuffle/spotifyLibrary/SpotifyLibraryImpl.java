@@ -13,16 +13,17 @@ public class SpotifyLibraryImpl implements SpotifyLibrary {
     }
 
     @Override
-    public Collection<String> populateLibrary() {
+    public void populateLibrary() {
         Collection<String> trackSet = spotifyAPIHelper.getFavoriteTrackIds();
         Collection<String> albumTrackSet = spotifyAPIHelper.getTrackIdsFromFavoriteAlbums();
         trackLibrary.addAll(trackSet);
         trackLibrary.addAll(albumTrackSet);
-        return trackLibrary;
     }
 
     @Override
-    public Collection<String> getTrackLibrary() { return trackLibrary; }
+    public Collection<String> getTrackLibrary() {
+        return new HashSet<String>(trackLibrary);
+    }
 }
 
 
