@@ -8,9 +8,8 @@ public class SpotifyLibrarySpy implements SpotifyLibrary {
   private int populateLibraryCalls = 0;
 
   @Override
-  public Collection<String> populateLibrary() {
+  public void populateLibrary() {
     populateLibraryCalls += 1;
-    return new HashSet<String>();
   }
 
   @Override

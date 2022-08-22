@@ -34,14 +34,6 @@ public class MainForm {
     this.tokenController = tokenController;
   }
 
-  public void startUi() {
-    frame = new JFrame("MainForm");
-    frame.setContentPane(this.rootPanel);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.pack();
-    frame.setVisible(true);
-  }
-
   private class GenerateUberShufflePlaylistButtonActionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -76,5 +68,17 @@ public class MainForm {
       generateUberShufflePlaylistButton.setEnabled(false);
     }
     frame.pack();
+  }
+
+  public void startUi() {
+    setFrame();
+    frame.setContentPane(this.rootPanel);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.pack();
+    frame.setVisible(true);
+  }
+
+  private static void setFrame() {
+    frame = new JFrame("MainForm");
   }
 }
