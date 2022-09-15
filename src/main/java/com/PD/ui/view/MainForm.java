@@ -24,8 +24,8 @@ public class MainForm {
   private JLabel playlistSizeError;
   private static JFrame frame;
 
-  private UberShuffleController shuffleController;
-  private AccessTokenController tokenController;
+  private final UberShuffleController shuffleController;
+  private final AccessTokenController tokenController;
 
   public MainForm(UberShuffleController shuffleController, AccessTokenController tokenController) {
     generateUberShufflePlaylistButton.addActionListener(new GenerateUberShufflePlaylistButtonActionListener());
@@ -39,11 +39,14 @@ public class MainForm {
     public void actionPerformed(ActionEvent e) {
       Thread uberShuffleThread = new Thread(() -> {
         try {
+          generateUberShufflePlaylistButton.setEnabled(false);
           tokenController.setNewAccessToken(accessTokenTextField.getText());
           shuffleController.clickUberShuffle(userIdTextField.getText(), Integer.parseInt(playlistSizeTextField.getText()));
         } catch (ShuffleException ex) {
           JOptionPane.showMessageDialog(null, ex.getMessage(), "UberShuffle",
               JOptionPane.ERROR_MESSAGE);
+        } finally {
+          generateUberShufflePlaylistButton.setEnabled(true);
         }
       });
       uberShuffleThread.start();
