@@ -1,6 +1,7 @@
 package com.PD.uberShuffle.httpAdapter;
 
 import java.io.IOException;
+import java.util.Objects;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONObject;
@@ -17,8 +18,7 @@ public class OkHttpCaller implements HttpCaller {
         int retryCountMax = 5;
         for (int i = 0; i < retryCountMax; i++) {
             try (Response response = humbleHttp.makeNewCall(request)) {
-                String responseBody = response.body().string();
-                JSONObject jsonRes = new JSONObject(responseBody);
+                JSONObject jsonRes = extractBody(response);
                 if (isErrorPresent(jsonRes)) {
                     handleResponseError(response, jsonRes);
                 } else {
@@ -31,18 +31,31 @@ public class OkHttpCaller implements HttpCaller {
         throw new RuntimeException("JSON Response was never populated");
     }
 
+    private static JSONObject extractBody(Response response) throws IOException {
+        return new JSONObject(Objects.requireNonNull(response.body()).string());
+    }
+
     private boolean isErrorPresent(JSONObject jsonRes) {
         return !jsonRes.isNull("error");
     }
 
     private void handleResponseError(Response response, JSONObject jsonResponse) {
         JSONObject error = (JSONObject) jsonResponse.get("error");
-        if ((Integer) error.get("status") == 429) {
-            if (response.headers().get("Retry-After") != null) {
-                sleepBasedOnRetry(response.headers().get("Retry-After"));
-            }
+        if (isStatusTooManyRequests(error)) {
+            pauseRequests(response);
         } else {
             throw new RuntimeException(String.format("%s - %s", error.get("status").toString(), error.get("message").toString()));
+        }
+    }
+
+    private static boolean isStatusTooManyRequests(JSONObject error) {
+        return (Integer) error.get("status") == 429;
+    }
+
+    private static void pauseRequests(Response response) {
+        String retryTime = response.headers().get("Retry-After");
+        if (retryTime != null) {
+            sleepBasedOnRetry(retryTime);
         }
     }
 
