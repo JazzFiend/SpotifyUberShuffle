@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import java.util.*;
 
+// TODO: This class depends on all of the Extractor classes. There's probably a way to do this better.
 public class SpotifyApiHelperImpl implements SpotifyApiHelper {
   private final HttpRequestAdapter httpRequestAdapter;
 

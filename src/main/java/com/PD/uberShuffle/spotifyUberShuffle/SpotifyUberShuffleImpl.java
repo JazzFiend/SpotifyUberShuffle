@@ -15,7 +15,6 @@ public class SpotifyUberShuffleImpl implements SpotifyUberShuffle {
     this.shuffler = shuffler;
   }
 
-  // TODO: This can be tested as an integration test. But I need a mock OkHttpClient before I can do that.
   @Override
   public void beginUberShuffle(UberShuffleRequest requestInfo) throws ShuffleException {
     library.populateLibrary();
