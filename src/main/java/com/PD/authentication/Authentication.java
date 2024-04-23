@@ -38,7 +38,7 @@ public class Authentication {
     result.append("response_type=code").append("&");
     result.append("redirect_uri=http://localhost:8080").append("&");
     result.append("state=").append(state).append("&");
-    result.append("scope=playlist-modify-private%20user-library-read").append("&");
+    result.append("scope=playlist-modify-private%20playlist-modify-public%20user-library-read").append("&");
     result.append("code_challenge_method=S256").append("&");
     result.append("code_challenge=").append(codeChallenge);
 
