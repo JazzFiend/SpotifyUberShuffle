@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class AuthenticationTest {
-  public static final String CLIENT_ID = "Replace with client id";
+class AuthenticationManualTest {
+  public static final String CLIENT_ID = "47e70434159244f3bbf61bb163323ac5"; // DON'T COMMIT
 
   @ParameterizedTest
   @ValueSource(ints = {1, 5, 43, 128})
