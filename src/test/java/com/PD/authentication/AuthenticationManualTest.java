@@ -10,7 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class AuthenticationManualTest {
-  public static final String CLIENT_ID = "47e70434159244f3bbf61bb163323ac5"; // DON'T COMMIT
+  public static final String CLIENT_ID = "NOPE";
 
   @ParameterizedTest
   @ValueSource(ints = {1, 5, 43, 128})
@@ -27,10 +27,10 @@ class AuthenticationManualTest {
   @Test
   void authorizationCurl() throws NoSuchAlgorithmException {
     String codeVerifier = Authentication.generateRandomString(128);
-    String authorizationCurl = Authentication.generateAuthorizationCurl(codeVerifier, CLIENT_ID);
+    String authorizationURL = Authentication.generateAuthorizationCurl(codeVerifier, CLIENT_ID);
     System.out.println(codeVerifier);
-    System.out.println(authorizationCurl);
-    assertNotNull(authorizationCurl);
+    System.out.println(authorizationURL);
+    assertNotNull(authorizationURL);
   }
   @Test
   void accessTokenCurl() {
