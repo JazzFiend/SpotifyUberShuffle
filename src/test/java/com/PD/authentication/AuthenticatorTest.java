@@ -1,6 +1,9 @@
 package com.PD.authentication;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -10,7 +13,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 
 class AuthenticatorTest {
   private static final String CLIENT_ID = "clientId";
@@ -39,7 +41,7 @@ class AuthenticatorTest {
         () -> auth.enterAuthorizationResponse(responseBadState),
         "Mismatched state did not throw"
       );
-      assertEquals("Response state did not match the requested state", e.getMessage());
+      assertThat(e.getMessage(), is("Response state did not match the requested state"));
     }
 
     // The next test is going to require me to save the state value after the authorizationURL is generated. I'll need to make the class not static as a result. Refactor that first.
@@ -47,18 +49,18 @@ class AuthenticatorTest {
 
   private static void checkEndpoint(String authorizationUrl) {
     String[] endpointAndParams = authorizationUrl.split("\\?");
-    assertEquals("https://accounts.spotify.com/authorize", endpointAndParams[0]);
+    assertThat(endpointAndParams[0], is("https://accounts.spotify.com/authorize"));
   }
 
   private static void checkParams(String authorizationUrl) {
     List<String> params = Arrays.stream(authorizationUrl.split("\\?")[1].split("&")).toList();
-    assertTrue(params.containsAll(List.of(
+    assertThat(params, hasItems(
         "client_id=" + CLIENT_ID,
         "response_type=code",
         "redirect_uri=http://localhost:8080",
         "scope=playlist-modify-private%20playlist-modify-public%20user-library-read",
         "code_challenge_method=S256"
-    )));
+    ));
     checkAllowedValues(params, "state");
     checkAllowedValues(params, "code_challenge");
   }
@@ -69,7 +71,7 @@ class AuthenticatorTest {
         .map(p -> p.split("="))
         .filter(p -> p[0].equals(paramName))
         .toList();
-    assertEquals(1, singleParam.size());
+    assertThat(singleParam, hasSize(1));
     assertTrue(singleParam.get(0)[1].chars().allMatch(c -> possibleValues.indexOf(c) != -1));
   }
 }
