@@ -29,6 +29,10 @@ public class SpotifyAuthorization {
     return result.toString();
   }
 
+  public static void enterAuthorizationResponse(String authorizationResponse) {
+    throw new RuntimeException("Response state did not match the requested state");
+  }
+
   private static String generateCodeChallenge(String codeVerifier) throws NoSuchAlgorithmException {
     byte[] data = codeVerifier.getBytes(StandardCharsets.US_ASCII);
     MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");

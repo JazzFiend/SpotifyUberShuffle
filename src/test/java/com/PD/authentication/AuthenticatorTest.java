@@ -1,15 +1,18 @@
 package com.PD.authentication;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+
 class AuthenticatorTest {
-  private static final String CLIENT_ID = "CLIENT_ID";
+  private static final String CLIENT_ID = "clientId";
 
   @Test
   void generateAuthorizationUrl() throws NoSuchAlgorithmException {
@@ -17,6 +20,24 @@ class AuthenticatorTest {
 
     checkEndpoint(authorizationUrl);
     checkParams(authorizationUrl);
+  }
+
+  // Response URL: http://localhost:8080/?code=AQDDn6dvLsCBA_g9FBN-lgMf72UcGtrfhbbThNLbzRx8xF-xfD7pbNxo_lw6b2jrFFKtZnKcB6MG3_nfPlqwtyQMrn9adQP_R_ImH0xV737QhPmRPjNyndkqmNarN2sSHSFrxLcIZWFr0eoCSlvc0ZYgZ28dADykE--y3pNRdBAgsYA7seGeBvsSalp2X6OC0xzaEQnDs430aziUcpCZccaQLWOPEAUJdWyWjFfJRrWCHHQ9BinJq6pFYEiWdI9KNKpkgWms5vY8UyAluy7ZL0c1s88aJXjBLTX_62louxBOMsnPfFzSxcT0ZvPcrwBF&state=5LIC_AJoZhlAibch
+
+  @Nested
+  class EnterAuthorizationResponse {
+    @Test
+    void stateDoesNotMatch() {
+      String responseBadState = "http://localhost:8080/?code=12345&state=bad";
+      RuntimeException e = assertThrows(
+        RuntimeException.class,
+        () -> SpotifyAuthorization.enterAuthorizationResponse(responseBadState),
+        "Mismatched state did not throw"
+      );
+      assertEquals("Response state did not match the requested state", e.getMessage());
+    }
+
+    // The next test is going to require me to save the state value after the authorizationURL is generated. I'll need to make the class not static as a result. Refactor that first.
   }
 
   private static void checkEndpoint(String authorizationUrl) {
