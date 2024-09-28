@@ -25,7 +25,7 @@ class AuthenticatorTest {
   void generateAuthorizationUrl() throws NoSuchAlgorithmException {
     AuthorizationUrl authUrl = auth.generateAuthorizationUrl(CLIENT_ID);
     checkEndpoint(authUrl.toString());
-    checkParams__NEW(authUrl);
+    checkParams(authUrl);
   }
 
   // Sample Response URL: http://localhost:8080/?code=AQDDn6dvLsCBA_g9FBN-lgMf72UcGtrfhbbThNLbzRx8xF-xfD7pbNxo_lw6b2jrFFKtZnKcB6MG3_nfPlqwtyQMrn9adQP_R_ImH0xV737QhPmRPjNyndkqmNarN2sSHSFrxLcIZWFr0eoCSlvc0ZYgZ28dADykE--y3pNRdBAgsYA7seGeBvsSalp2X6OC0xzaEQnDs430aziUcpCZccaQLWOPEAUJdWyWjFfJRrWCHHQ9BinJq6pFYEiWdI9KNKpkgWms5vY8UyAluy7ZL0c1s88aJXjBLTX_62louxBOMsnPfFzSxcT0ZvPcrwBF&state=5LIC_AJoZhlAibch
@@ -43,7 +43,6 @@ class AuthenticatorTest {
       assertThat(e.getMessage(), is("Response state did not match the requested state"));
     }
 
-    // This test would be a lot easier if the authUrl was a class instead of a string. I think I should make a POJO out of that.
 //    @Test
 //    void goodAuthorizationResponse() throws NoSuchAlgorithmException {
 //      String authUrl = auth.generateAuthorizationUrl(CLIENT_ID);
@@ -55,7 +54,7 @@ class AuthenticatorTest {
     assertThat(endpointAndParams[0], is("https://accounts.spotify.com/authorize"));
   }
 
-  private static void checkParams__NEW(AuthorizationUrl authorizationUrl) {
+  private static void checkParams(AuthorizationUrl authorizationUrl) {
     List<String> params = Arrays.stream(authorizationUrl.toString().split("\\?")[1].split("&")).toList();
     assertThat(params, hasItems(
         "client_id=" + CLIENT_ID,
@@ -66,11 +65,11 @@ class AuthenticatorTest {
     ));
     assertTrue(params.stream().anyMatch(p->p.contains("state=")));
     assertTrue(params.stream().anyMatch(p->p.contains("code_challenge=")));
-    checkAllowedValues__NEW(authorizationUrl.getState());
-    checkAllowedValues__NEW(authorizationUrl.getCodeChallenge());
+    checkAllowedValues(authorizationUrl.getState());
+    checkAllowedValues(authorizationUrl.getCodeChallenge());
   }
 
-  private static void checkAllowedValues__NEW(String param) {
+  private static void checkAllowedValues(String param) {
     String possibleValues = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
     assertTrue(param.chars().allMatch(c -> possibleValues.indexOf(c) != -1));
   }
