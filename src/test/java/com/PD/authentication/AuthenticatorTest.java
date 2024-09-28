@@ -2,7 +2,6 @@ package com.PD.authentication;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,12 +23,12 @@ class AuthenticatorTest {
 
   @Test
   void generateAuthorizationUrl() throws NoSuchAlgorithmException {
-    String authorizationUrl = auth.generateAuthorizationUrl(CLIENT_ID);
-    checkEndpoint(authorizationUrl);
-    checkParams(authorizationUrl);
+    AuthorizationUrl authUrl = auth.generateAuthorizationUrl(CLIENT_ID);
+    checkEndpoint(authUrl.toString());
+    checkParams__NEW(authUrl);
   }
 
-  // Response URL: http://localhost:8080/?code=AQDDn6dvLsCBA_g9FBN-lgMf72UcGtrfhbbThNLbzRx8xF-xfD7pbNxo_lw6b2jrFFKtZnKcB6MG3_nfPlqwtyQMrn9adQP_R_ImH0xV737QhPmRPjNyndkqmNarN2sSHSFrxLcIZWFr0eoCSlvc0ZYgZ28dADykE--y3pNRdBAgsYA7seGeBvsSalp2X6OC0xzaEQnDs430aziUcpCZccaQLWOPEAUJdWyWjFfJRrWCHHQ9BinJq6pFYEiWdI9KNKpkgWms5vY8UyAluy7ZL0c1s88aJXjBLTX_62louxBOMsnPfFzSxcT0ZvPcrwBF&state=5LIC_AJoZhlAibch
+  // Sample Response URL: http://localhost:8080/?code=AQDDn6dvLsCBA_g9FBN-lgMf72UcGtrfhbbThNLbzRx8xF-xfD7pbNxo_lw6b2jrFFKtZnKcB6MG3_nfPlqwtyQMrn9adQP_R_ImH0xV737QhPmRPjNyndkqmNarN2sSHSFrxLcIZWFr0eoCSlvc0ZYgZ28dADykE--y3pNRdBAgsYA7seGeBvsSalp2X6OC0xzaEQnDs430aziUcpCZccaQLWOPEAUJdWyWjFfJRrWCHHQ9BinJq6pFYEiWdI9KNKpkgWms5vY8UyAluy7ZL0c1s88aJXjBLTX_62louxBOMsnPfFzSxcT0ZvPcrwBF&state=5LIC_AJoZhlAibch
 
   @Nested
   class EnterAuthorizationResponse {
@@ -44,7 +43,11 @@ class AuthenticatorTest {
       assertThat(e.getMessage(), is("Response state did not match the requested state"));
     }
 
-    // The next test is going to require me to save the state value after the authorizationURL is generated. I'll need to make the class not static as a result. Refactor that first.
+    // This test would be a lot easier if the authUrl was a class instead of a string. I think I should make a POJO out of that.
+//    @Test
+//    void goodAuthorizationResponse() throws NoSuchAlgorithmException {
+//      String authUrl = auth.generateAuthorizationUrl(CLIENT_ID);
+//    }
   }
 
   private static void checkEndpoint(String authorizationUrl) {
@@ -52,8 +55,8 @@ class AuthenticatorTest {
     assertThat(endpointAndParams[0], is("https://accounts.spotify.com/authorize"));
   }
 
-  private static void checkParams(String authorizationUrl) {
-    List<String> params = Arrays.stream(authorizationUrl.split("\\?")[1].split("&")).toList();
+  private static void checkParams__NEW(AuthorizationUrl authorizationUrl) {
+    List<String> params = Arrays.stream(authorizationUrl.toString().split("\\?")[1].split("&")).toList();
     assertThat(params, hasItems(
         "client_id=" + CLIENT_ID,
         "response_type=code",
@@ -61,17 +64,14 @@ class AuthenticatorTest {
         "scope=playlist-modify-private%20playlist-modify-public%20user-library-read",
         "code_challenge_method=S256"
     ));
-    checkAllowedValues(params, "state");
-    checkAllowedValues(params, "code_challenge");
+    assertTrue(params.stream().anyMatch(p->p.contains("state=")));
+    assertTrue(params.stream().anyMatch(p->p.contains("code_challenge=")));
+    checkAllowedValues__NEW(authorizationUrl.getState());
+    checkAllowedValues__NEW(authorizationUrl.getCodeChallenge());
   }
 
-  private static void checkAllowedValues(List<String> params, String paramName) {
+  private static void checkAllowedValues__NEW(String param) {
     String possibleValues = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
-    List<String[]> singleParam = params.stream()
-        .map(p -> p.split("="))
-        .filter(p -> p[0].equals(paramName))
-        .toList();
-    assertThat(singleParam, hasSize(1));
-    assertTrue(singleParam.get(0)[1].chars().allMatch(c -> possibleValues.indexOf(c) != -1));
+    assertTrue(param.chars().allMatch(c -> possibleValues.indexOf(c) != -1));
   }
 }

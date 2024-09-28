@@ -10,21 +10,11 @@ public class SpotifyAuthorization {
   private static final Random rng = new Random();
   private static final String POSSIBLE_VALUES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
 
-  public String generateAuthorizationUrl(String clientId) throws NoSuchAlgorithmException {
-    StringBuilder result = new StringBuilder();
+  // Do I want to catch the exception here? What is it doing for me?
+  public AuthorizationUrl generateAuthorizationUrl(String clientId) throws NoSuchAlgorithmException {
     String state = generateRandomString(16);
     String codeChallenge = generateCodeChallenge(generateRandomString(128));
-
-    result.append("https://accounts.spotify.com/authorize?");
-    result.append("client_id=").append(clientId).append("&");
-    result.append("response_type=code").append("&");
-    result.append("redirect_uri=http://localhost:8080").append("&");
-    result.append("state=").append(state).append("&");
-    result.append("scope=playlist-modify-private%20playlist-modify-public%20user-library-read").append("&");
-    result.append("code_challenge_method=S256").append("&");
-    result.append("code_challenge=").append(codeChallenge);
-
-    return result.toString();
+    return new AuthorizationUrl(clientId, state, codeChallenge);
   }
 
   public void enterAuthorizationResponse(String authorizationResponse) {
