@@ -10,9 +10,7 @@ public class SpotifyAuthorization {
   private static final Random rng = new Random();
   private static final String POSSIBLE_VALUES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
 
-  private SpotifyAuthorization() {}
-
-  public static String generateAuthorizationUrl(String clientId) throws NoSuchAlgorithmException {
+  public String generateAuthorizationUrl(String clientId) throws NoSuchAlgorithmException {
     StringBuilder result = new StringBuilder();
     String state = generateRandomString(16);
     String codeChallenge = generateCodeChallenge(generateRandomString(128));
@@ -29,7 +27,7 @@ public class SpotifyAuthorization {
     return result.toString();
   }
 
-  public static void enterAuthorizationResponse(String authorizationResponse) {
+  public void enterAuthorizationResponse(String authorizationResponse) {
     throw new RuntimeException("Response state did not match the requested state");
   }
 

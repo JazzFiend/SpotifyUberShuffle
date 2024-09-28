@@ -7,17 +7,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 
 class AuthenticatorTest {
   private static final String CLIENT_ID = "clientId";
+  SpotifyAuthorization auth;
+  @BeforeEach
+  void setup() {
+    auth = new SpotifyAuthorization();
+  }
 
   @Test
   void generateAuthorizationUrl() throws NoSuchAlgorithmException {
-    String authorizationUrl = SpotifyAuthorization.generateAuthorizationUrl(CLIENT_ID);
-
+    String authorizationUrl = auth.generateAuthorizationUrl(CLIENT_ID);
     checkEndpoint(authorizationUrl);
     checkParams(authorizationUrl);
   }
@@ -31,7 +36,7 @@ class AuthenticatorTest {
       String responseBadState = "http://localhost:8080/?code=12345&state=bad";
       RuntimeException e = assertThrows(
         RuntimeException.class,
-        () -> SpotifyAuthorization.enterAuthorizationResponse(responseBadState),
+        () -> auth.enterAuthorizationResponse(responseBadState),
         "Mismatched state did not throw"
       );
       assertEquals("Response state did not match the requested state", e.getMessage());
