@@ -5,22 +5,33 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Random;
+import lombok.Getter;
 
 public class SpotifyAuthorization {
   private static final Random rng = new Random();
   private static final String POSSIBLE_VALUES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
+  private AuthorizationUrl authUrl;
+  @Getter
+  private String authenticationCode;
 
-  // Do I want to catch the exception here? What is it doing for me?
+  public SpotifyAuthorization() {
+    authenticationCode = "";
+  }
+
   public AuthorizationUrl generateAuthorizationUrl(String clientId) throws NoSuchAlgorithmException {
     String state = generateRandomString(16);
     String codeChallenge = generateCodeChallenge(generateRandomString(128));
-    return new AuthorizationUrl(clientId, state, codeChallenge);
+    authUrl = new AuthorizationUrl(clientId, state, codeChallenge);
+    return authUrl;
   }
 
-  public void enterAuthorizationResponse(String authorizationResponse) {
-    throw new RuntimeException("Response state did not match the requested state");
+  public void hydrateWithAuthorizationResponse(AuthorizationResponse authResponse) {
+    if(!authResponse.getState().equals(authUrl.getState())) { throw new RuntimeException("Response state did not match the requested state"); }
+
+    this.authenticationCode = authResponse.getAuthenticationCode();
   }
 
+  // Do I want to catch the exception here? What is it doing for me?
   private static String generateCodeChallenge(String codeVerifier) throws NoSuchAlgorithmException {
     byte[] data = codeVerifier.getBytes(StandardCharsets.US_ASCII);
     MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");

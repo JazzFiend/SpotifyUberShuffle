@@ -6,10 +6,8 @@ import lombok.Getter;
 
 public class AuthorizationUrl {
   private final String clientId;
-  @Getter
-  private final String state;
-  @Getter
-  private final String codeChallenge;
+  @Getter private final String state;
+  @Getter private final String codeChallenge;
 
   public AuthorizationUrl(String clientId, String state, String codeChallenge) {
     this.clientId = clientId;
