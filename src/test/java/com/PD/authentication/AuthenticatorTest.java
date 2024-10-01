@@ -34,19 +34,18 @@ class AuthenticatorTest {
   class EnterAuthorizationResponse {
     @Test
     void stateDoesNotMatch() throws NoSuchAlgorithmException {
-      String responseBadState = "http://localhost:8080/?code=12345&state=bad";
+      AuthorizationResponse responseBadState = new AuthorizationResponse("http://localhost:8080/?code=12345&state=bad");
       auth.generateAuthorizationUrl(CLIENT_ID);
-      RuntimeException e = assertThrows(
-        RuntimeException.class,
-        () -> auth.hydrateWithAuthorizationResponse(new AuthorizationResponse(responseBadState)),
+      IncorrectStateException e = assertThrows(
+        IncorrectStateException.class,
+        () -> auth.hydrateWithAuthorizationResponse(responseBadState),
         "Mismatched state did not throw"
       );
       assertThat(e.getMessage(), is("Response state did not match the requested state"));
     }
 
-    // REFACTOR STEP
     @Test
-    void goodAuthorizationResponse() throws NoSuchAlgorithmException {
+    void goodAuthorizationResponse() throws NoSuchAlgorithmException, IncorrectStateException {
       AuthorizationUrl authUrl = auth.generateAuthorizationUrl(CLIENT_ID);
       String authCode = "12345";
       AuthorizationResponse authResponse = new AuthorizationResponse("http://localhost:8080/?code="+ authCode + "&state=" + authUrl.getState());

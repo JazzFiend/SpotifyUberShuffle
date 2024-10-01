@@ -25,8 +25,10 @@ public class SpotifyAuthorization {
     return authUrl;
   }
 
-  public void hydrateWithAuthorizationResponse(AuthorizationResponse authResponse) {
-    if(!authResponse.getState().equals(authUrl.getState())) { throw new RuntimeException("Response state did not match the requested state"); }
+  public void hydrateWithAuthorizationResponse(AuthorizationResponse authResponse)
+      throws IncorrectStateException {
+    if(!authResponse.getState().equals(authUrl.getState())) { throw new IncorrectStateException(
+        "Response state did not match the requested state"); }
 
     this.authenticationCode = authResponse.getAuthenticationCode();
   }
