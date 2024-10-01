@@ -9,49 +9,53 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
-    private final HttpCaller httpCaller;
-    private String accessToken;
+  private final HttpCaller httpCaller;
+  private String accessToken;
 
-    public OkHttpHttpRequestAdapter(HttpCaller httpCaller) {
-        this.httpCaller = httpCaller;
-        this.accessToken = "";
-    }
+  public OkHttpHttpRequestAdapter(HttpCaller httpCaller) {
+    this.httpCaller = httpCaller;
+    this.accessToken = "";
+  }
 
-    @Override
-    public JSONObject makeGetRequest(String url) {
-        Request request = new Request.Builder()
-            .get()
-            .header("Authorization", accessToken)
-            .url(url)
-            .build();
+  @Override
+  public JSONObject makeGetRequest(String url) {
+    Request request = new Request.Builder()
+        .get()
+        .header("Authorization", accessToken)
+        .url(url)
+        .build();
 
-        return makeRequest(request);
-    }
+    return makeRequest(request);
+  }
 
-    @Override
-    public JSONObject makePostRequest(String url) {
-        return makePostRequest(url, new HashMap<>());
-    }
+  @Override
+  public JSONObject makePostRequest(String url) {
+    return makePostRequest(url, new HashMap<>());
+  }
 
-    @Override
-    public JSONObject makePostRequest(String url, Map<String, String> bodyParameters) {
-        final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        RequestBody body = RequestBody.create(new JSONObject(bodyParameters).toString(), JSON);
-        Request request = new Request.Builder()
-          .post(body)
-          .header("Authorization", accessToken)
-          .url(url)
-          .build();
+  @Override
+  public JSONObject makePostRequest(String url, Map<String, String> bodyParameters) {
+    final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    RequestBody body = RequestBody.create(new JSONObject(bodyParameters).toString(), JSON);
+    Request request = new Request.Builder()
+        .post(body)
+        .header("Authorization", accessToken)
+        .url(url)
+        .build();
 
-        return makeRequest(request);
-    }
+    return makeRequest(request);
+  }
 
-    private JSONObject makeRequest(Request request) {
-        return httpCaller.makeRequest(request);
-    }
+  public JSONObject makePostRequest(String url, Map<String, String> bodyParameters, Map<String, String> headers) {
 
-    @Override
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
+  }
+
+  private JSONObject makeRequest(Request request) {
+    return httpCaller.makeRequest(request);
+  }
+
+  @Override
+  public void setAccessToken(String accessToken) {
+    this.accessToken = accessToken;
+  }
 }
