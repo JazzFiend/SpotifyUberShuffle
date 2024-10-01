@@ -1,5 +1,10 @@
 package com.PD.authentication;
 
+import com.PD.uberShuffle.httpAdapter.HttpCaller;
+import com.PD.uberShuffle.httpAdapter.HttpRequestAdapter;
+import com.PD.uberShuffle.httpAdapter.HumbleOkHttpCallerImpl;
+import com.PD.uberShuffle.httpAdapter.OkHttpCaller;
+import com.PD.uberShuffle.httpAdapter.OkHttpHttpRequestAdapter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -11,8 +16,8 @@ public class SpotifyAuthorization {
   private static final Random rng = new Random();
   private static final String POSSIBLE_VALUES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
   private AuthorizationUrl authUrl;
-  @Getter
-  private String authenticationCode;
+  @Getter private String authenticationCode;
+  @Getter private String accessToken;
 
   public SpotifyAuthorization() {
     authenticationCode = "";
@@ -32,6 +37,17 @@ public class SpotifyAuthorization {
 
     this.authenticationCode = authResponse.getAuthenticationCode();
   }
+
+//  public void requestAccessToken() {
+//    HumbleOkHttpCallerImpl callerImpl = new HumbleOkHttpCallerImpl();
+//    HttpCaller caller = new OkHttpCaller(callerImpl);
+//    HttpRequestAdapter http = new OkHttpHttpRequestAdapter(caller);
+//
+//    String getAccessTokenEndpoint = "https://accounts.spotify.com/api/token";
+//
+//    http.makePostRequest()
+//
+//  }
 
   // Do I want to catch the exception here? What is it doing for me?
   private static String generateCodeChallenge(String codeVerifier) throws NoSuchAlgorithmException {

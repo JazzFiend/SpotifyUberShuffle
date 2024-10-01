@@ -54,6 +54,14 @@ class AuthenticatorTest {
     }
   }
 
+
+  // Right now, my HTTP protocol doesn't support specifying headers. I'm going to open a new PR that allows that.
+//  @Test
+//  void requestAccessToken() {
+//    auth.requestAccessToken();
+//    assertThat(auth.getAccessToken(), is("Bearer Token"));
+//  }
+
   private static void checkEndpoint(String authorizationUrl) {
     String[] endpointAndParams = authorizationUrl.split("\\?");
     assertThat(endpointAndParams[0], is("https://accounts.spotify.com/authorize"));
