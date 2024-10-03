@@ -75,4 +75,10 @@ public class HttpRequestAdapterMock implements HttpRequestAdapter {
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
+
+    @Override
+    public JSONObject makePostRequest(String url, Map<String, String> bodyParams,
+        Map<String, String> headers) {
+        return null;
+    }
 }

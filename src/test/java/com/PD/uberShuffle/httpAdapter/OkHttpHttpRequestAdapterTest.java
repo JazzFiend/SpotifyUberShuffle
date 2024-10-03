@@ -89,4 +89,33 @@ public class OkHttpHttpRequestAdapterTest {
     assertEquals(actual.get("url"), expected.get("url"));
     assertEquals(actual.get("method"), expected.get("method"));
   }
+
+  // The headers should be working now. But thanks to the mock object, am I actually testing anything here?
+  @Test
+  void postRequestWithHeadersTest() {
+    final String url = "http://www.postrequest.com/";
+
+    StringWriter sw = new StringWriter();
+    new JSONWriter(sw)
+        .object()
+        .key("Authorization")
+        .value(accessToken)
+        .key("url")
+        .value(url)
+        .key("method")
+        .value("POST")
+        .endObject();
+    JSONObject expected = new JSONObject(sw.toString());
+    Map<String, String> bodyParams = new HashMap<>();
+    bodyParams.put("param", "value");
+    Map<String, String> headers = new HashMap<>();
+    headers.put("Authorization", accessToken);
+    headers.put("AnotherHeader", "Value");
+
+    JSONObject actual = http.makePostRequest(url, bodyParams, headers);
+
+    assertEquals(actual.get("Authorization"), expected.get("Authorization"));
+    assertEquals(actual.get("url"), expected.get("url"));
+    assertEquals(actual.get("method"), expected.get("method"));
+  }
 }

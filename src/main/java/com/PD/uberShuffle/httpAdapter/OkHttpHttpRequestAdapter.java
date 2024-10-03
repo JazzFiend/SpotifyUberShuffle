@@ -1,5 +1,6 @@
 package com.PD.uberShuffle.httpAdapter;
 
+import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -47,7 +48,15 @@ public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
   }
 
   public JSONObject makePostRequest(String url, Map<String, String> bodyParameters, Map<String, String> headers) {
+    final MediaType json = MediaType.get("application/json; charset=utf-8");
+    RequestBody body = RequestBody.create(new JSONObject(bodyParameters).toString(), json);
+    Request request = new Request.Builder()
+        .post(body)
+        .headers(Headers.of(headers))
+        .url(url)
+        .build();
 
+    return makeRequest(request);
   }
 
   private JSONObject makeRequest(Request request) {
