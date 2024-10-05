@@ -1,6 +1,7 @@
 package com.PD.uberShuffle.httpAdapter;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -24,36 +25,37 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-public class OkHttpHttpRequestAdapterTest {
+class OkHttpHttpRequestAdapterTest {
   private final String accessToken = "Bearer 123";
   private HttpRequestAdapter http;
+  private OkHttpCaller mockCaller;
+  private OkHttpHttpRequestAdapter httpWithMock;
 
   @BeforeEach
   public void setup() {
     http = new OkHttpHttpRequestAdapter(new OkHttpCallerMock());
     http.setAccessToken(accessToken);
+    mockCaller = mock();
+    when(mockCaller.makeRequest(any(Request.class))).thenReturn(new JSONObject());
+    httpWithMock = new OkHttpHttpRequestAdapter(mockCaller);
   }
 
   @Test
-  public void getRequestTest() {
+  void getRequestTest() {
     final String url = "http://www.getrequest.com/";
+    Request expectedRequest = new Builder()
+        .get()
+        .url(url)
+        .header("Authorization", "Bearer xyz")
+        .build();
+    Map<String, String> headers = new HashMap<>();
+    headers.put("Authorization", "Bearer xyz");
 
-    StringWriter sw = new StringWriter();
-    new JSONWriter(sw)
-        .object()
-        .key("Authorization")
-        .value(accessToken)
-        .key("url")
-        .value(url)
-        .key("method")
-        .value("GET")
-        .endObject();
-    JSONObject expected = new JSONObject(sw.toString());
-    JSONObject actual = http.makeGetRequest(url);
+    httpWithMock.makeGetRequestWithHeaders(url, headers);
+    Request actualRequest = checkMakeRequestAndExtractParameter();
 
-    assertEquals(actual.get("Authorization"), expected.get("Authorization"));
-    assertEquals(actual.get("url"), expected.get("url"));
-    assertEquals(actual.get("method"), expected.get("method"));
+    assertRequestsEqual(expectedRequest, actualRequest);
+    assertThat(expectedRequest.body(), is(nullValue()));
   }
 
   @Test
@@ -103,13 +105,10 @@ public class OkHttpHttpRequestAdapterTest {
     assertEquals(actual.get("method"), expected.get("method"));
   }
 
+  // Okay, this test is working. But the rest of the tests aren't actually checking anything. I'm
+  // going to fix up the other tests using Mockito.
   @Test
   void postRequestWithHeadersTest() throws IOException {
-    OkHttpCaller mockCaller = mock();
-    when(mockCaller.makeRequest(any(Request.class))).thenReturn(new JSONObject());
-
-    OkHttpHttpRequestAdapter httpWithMock = new OkHttpHttpRequestAdapter(mockCaller);
-
     final String url = "https://www.postrequest.com/";
     Map<String, String> bodyParams = new HashMap<>();
     bodyParams.put("param", "value");
@@ -118,24 +117,36 @@ public class OkHttpHttpRequestAdapterTest {
     headers.put("AnotherHeader", "Value");
 
     final MediaType json = MediaType.get("application/json; charset=utf-8");
-    RequestBody body = RequestBody.create(new JSONObject(bodyParams).toString(), json);
+    RequestBody expectedBody = RequestBody.create(new JSONObject(bodyParams).toString(), json);
     Request expectedRequest = new Builder()
-        .post(body)
+        .post(expectedBody)
         .header("Authorization", accessToken)
         .header("AnotherHeader", "Value")
         .url(url)
         .build();
 
     httpWithMock.makePostRequest(url, bodyParams, headers);
+    Request actualRequest = checkMakeRequestAndExtractParameter();
 
+    assertRequestsEqual(expectedRequest, actualRequest);
+    assertBodyParamsEqual(expectedRequest, actualRequest);
+  }
+
+  private Request checkMakeRequestAndExtractParameter() {
     ArgumentCaptor<Request> requestCaptor = ArgumentCaptor.forClass(Request.class);
     verify(mockCaller, times(1)).makeRequest(requestCaptor.capture());
-    Request actualRequest = requestCaptor.getValue();
+    return requestCaptor.getValue();
+  }
 
+  private static void assertRequestsEqual(Request expectedRequest, Request actualRequest) {
     assertThat(expectedRequest.url(), is(actualRequest.url()));
     assertThat(expectedRequest.method(), is(actualRequest.method()));
     assertThat(expectedRequest.headers().toMultimap(), is(actualRequest.headers().toMultimap()));
+  }
+
+  private static void assertBodyParamsEqual(Request expectedRequest, Request actualRequest) throws IOException {
     assertThat(expectedRequest.body().contentType(), is(actualRequest.body().contentType()));
     assertThat(expectedRequest.body().contentLength(), is(actualRequest.body().contentLength()));
   }
+
 }

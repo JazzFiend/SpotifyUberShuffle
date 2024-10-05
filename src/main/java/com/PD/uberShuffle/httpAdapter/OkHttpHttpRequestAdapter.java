@@ -30,6 +30,18 @@ public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
   }
 
   @Override
+  public JSONObject makeGetRequestWithHeaders(String url, Map<String, String> headers) {
+    Request request = new Request.Builder()
+        .get()
+        .headers(Headers.of(headers))
+        .url(url)
+        .build();
+
+    return makeRequest(request);
+  }
+
+
+  @Override
   public JSONObject makePostRequest(String url) {
     return makePostRequest(url, new HashMap<>());
   }

@@ -44,6 +44,11 @@ public class HttpRequestAdapterMock implements HttpRequestAdapter {
     }
 
     @Override
+    public JSONObject makeGetRequestWithHeaders(String url, Map<String, String> headers) {
+        return null;
+    }
+
+    @Override
     public JSONObject makePostRequest(String url) {
         return makePostRequest(url, new HashMap<>());
     }
