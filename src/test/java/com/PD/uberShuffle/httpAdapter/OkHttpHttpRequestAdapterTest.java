@@ -22,6 +22,7 @@ import okhttp3.RequestBody;
 import org.json.JSONObject;
 import org.json.JSONWriter;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -30,6 +31,7 @@ class OkHttpHttpRequestAdapterTest {
   private HttpRequestAdapter http;
   private OkHttpCaller mockCaller;
   private OkHttpHttpRequestAdapter httpWithMock;
+  private final String url = "https://www.dummy.com/";
 
   @BeforeEach
   public void setup() {
@@ -41,29 +43,64 @@ class OkHttpHttpRequestAdapterTest {
     httpWithMock.setAccessToken(accessToken);
   }
 
-  // Complete coverage with get request
-  @Test
-  void getRequestTest() {
-    final String url = "https://www.getrequest.com/";
-    Request expectedRequest = new Builder()
-        .get()
-        .url(url)
-        .header("Authorization", "Bearer 123")
-        .build();
-    Map<String, String> headers = new HashMap<>();
-    headers.put("Authorization", "Bearer 123");
+  @Nested
+  class GetTests {
+    @Test
+    void getRequestNoHeaders() {
+      Request expectedRequest = new Builder()
+          .get()
+          .url(url)
+          .header("Authorization", accessToken)
+          .build();
 
-    httpWithMock.makeGetRequest(url, headers);
-    Request actualRequest = checkMakeRequestAndExtractParameter();
+      httpWithMock.makeGetRequest(url);
+      Request actualRequest = checkMakeRequestAndExtractParameter();
 
-    assertRequestsEqual(expectedRequest, actualRequest);
-    assertThat(expectedRequest.body(), is(nullValue()));
+      assertRequestsEqual(expectedRequest, actualRequest);
+      assertThat(expectedRequest.body(), is(nullValue()));
+    }
+
+    @Test
+    void getRequestWithHeaderAddAuthenticationTest() {
+      Request expectedRequest = new Builder()
+          .get()
+          .url(url)
+          .header("Authorization", accessToken)
+          .header("Host", "DummyHost")
+          .build();
+      Map<String, String> headers = new HashMap<>();
+      headers.put("Host", "DummyHost");
+
+      httpWithMock.makeGetRequest(url, headers);
+      Request actualRequest = checkMakeRequestAndExtractParameter();
+
+      assertRequestsEqual(expectedRequest, actualRequest);
+      assertThat(expectedRequest.body(), is(nullValue()));
+    }
+
+    // Complete coverage with get request
+    @Test
+    void getRequestRewriteAuthenticationTest() {
+      Request expectedRequest = new Builder()
+          .get()
+          .url(url)
+          .header("Authorization", accessToken)
+          .build();
+      Map<String, String> headers = new HashMap<>();
+      headers.put("Authorization", accessToken);
+
+      httpWithMock.makeGetRequest(url, headers);
+      Request actualRequest = checkMakeRequestAndExtractParameter();
+
+      assertRequestsEqual(expectedRequest, actualRequest);
+      assertThat(expectedRequest.body(), is(nullValue()));
+    }
   }
+
+
 
   @Test
   public void postRequestTest() {
-    final String url = "http://www.postrequest.com/";
-
     StringWriter sw = new StringWriter();
     new JSONWriter(sw)
         .object()
@@ -84,8 +121,6 @@ class OkHttpHttpRequestAdapterTest {
 
   @Test
   public void postRequestWithBodyParamsTest() {
-    final String url = "http://www.postrequest.com/";
-
     StringWriter sw = new StringWriter();
     new JSONWriter(sw)
         .object()
@@ -111,7 +146,6 @@ class OkHttpHttpRequestAdapterTest {
   // going to fix up the other tests using Mockito.
   @Test
   void postRequestWithHeadersTest() throws IOException {
-    final String url = "https://www.postrequest.com/";
     Map<String, String> bodyParams = new HashMap<>();
     bodyParams.put("param", "value");
     Map<String, String> headers = new HashMap<>();
@@ -141,14 +175,13 @@ class OkHttpHttpRequestAdapterTest {
   }
 
   private static void assertRequestsEqual(Request expectedRequest, Request actualRequest) {
-    assertThat(expectedRequest.url(), is(actualRequest.url()));
-    assertThat(expectedRequest.method(), is(actualRequest.method()));
-    assertThat(expectedRequest.headers().toMultimap(), is(actualRequest.headers().toMultimap()));
+    assertThat(actualRequest.url(), is(expectedRequest.url()));
+    assertThat(actualRequest.method(), is(expectedRequest.method()));
+    assertThat(actualRequest.headers().toMultimap(), is(expectedRequest.headers().toMultimap()));
   }
 
   private static void assertBodyParamsEqual(Request expectedRequest, Request actualRequest) throws IOException {
-    assertThat(expectedRequest.body().contentType(), is(actualRequest.body().contentType()));
-    assertThat(expectedRequest.body().contentLength(), is(actualRequest.body().contentLength()));
+    assertThat(actualRequest.body().contentType(), is(expectedRequest.body().contentType()));
+    assertThat(actualRequest.body().contentLength(), is(expectedRequest.body().contentLength()));
   }
-
 }
