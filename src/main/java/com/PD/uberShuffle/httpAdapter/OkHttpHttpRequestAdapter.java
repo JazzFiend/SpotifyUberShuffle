@@ -4,12 +4,15 @@ import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
+
+  public static final String AUTH_HEADER = "Authorization";
   private final HttpCaller httpCaller;
   private String accessToken;
 
@@ -20,26 +23,19 @@ public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
 
   @Override
   public JSONObject makeGetRequest(String url) {
-    Request request = new Request.Builder()
-        .get()
-        .header("Authorization", accessToken)
-        .url(url)
-        .build();
-
-    return makeRequest(request);
+    return makeGetRequest(url, new HashMap<>());
   }
 
   @Override
-  public JSONObject makeGetRequestWithHeaders(String url, Map<String, String> headers) {
+  public JSONObject makeGetRequest(String url, Map<String, String> headers) {
+    Map<String, String> headersWithAccessToken = addAccessTokenToHeaders(headers);
     Request request = new Request.Builder()
         .get()
-        .headers(Headers.of(headers))
+        .headers(Headers.of(headersWithAccessToken))
         .url(url)
         .build();
-
     return makeRequest(request);
   }
-
 
   @Override
   public JSONObject makePostRequest(String url) {
@@ -52,7 +48,7 @@ public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
     RequestBody body = RequestBody.create(new JSONObject(bodyParameters).toString(), JSON);
     Request request = new Request.Builder()
         .post(body)
-        .header("Authorization", accessToken)
+        .header(AUTH_HEADER, accessToken)
         .url(url)
         .build();
 
@@ -71,12 +67,19 @@ public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
     return makeRequest(request);
   }
 
+  @Override
+  public void setAccessToken(String accessToken) {
+    this.accessToken = accessToken;
+  }
+
   private JSONObject makeRequest(Request request) {
     return httpCaller.makeRequest(request);
   }
 
-  @Override
-  public void setAccessToken(String accessToken) {
-    this.accessToken = accessToken;
+  @NotNull
+  private Map<String, String> addAccessTokenToHeaders(Map<String, String> headers) {
+    Map<String, String> headersWithAccessToken = new HashMap<>(headers);
+    headersWithAccessToken.put(AUTH_HEADER, accessToken);
+    return headersWithAccessToken;
   }
 }

@@ -32,7 +32,6 @@ class AuthenticationTest {
     System.out.println(authorizationCurl);
     assertNotNull(authorizationCurl);
   }
-
   @Test
   void accessTokenCurl() {
     String code = "Replace with response from previous test";
@@ -41,3 +40,5 @@ class AuthenticationTest {
     System.out.println(accessTokenCurl);
   }
 }
+
+// Bearer BQBox-Me5Uck9z90wVujmKRKIi1kE_bVNKQ6iAtujYmtcwz9uWxI7YOXAr54rdLGqkk7NsBqbpZKesMvIMRtEwkeTSv5pOflyc8QdzeeUPSTQ3PouaRhbfP1kucSC6Rk0vhT3KewinJU99Qclfs8TAGEaSQw27XyKGMn8EINJG-3_sWWudyxsuSHwuCbghurI6zjxOBIMnHG4BYtBJ6AtaYmUIDbuxbv6ZQg2TNbE7wrjpf6JCBCG88exKZPi6WneQ

@@ -38,20 +38,22 @@ class OkHttpHttpRequestAdapterTest {
     mockCaller = mock();
     when(mockCaller.makeRequest(any(Request.class))).thenReturn(new JSONObject());
     httpWithMock = new OkHttpHttpRequestAdapter(mockCaller);
+    httpWithMock.setAccessToken(accessToken);
   }
 
+  // Complete coverage with get request
   @Test
   void getRequestTest() {
-    final String url = "http://www.getrequest.com/";
+    final String url = "https://www.getrequest.com/";
     Request expectedRequest = new Builder()
         .get()
         .url(url)
-        .header("Authorization", "Bearer xyz")
+        .header("Authorization", "Bearer 123")
         .build();
     Map<String, String> headers = new HashMap<>();
-    headers.put("Authorization", "Bearer xyz");
+    headers.put("Authorization", "Bearer 123");
 
-    httpWithMock.makeGetRequestWithHeaders(url, headers);
+    httpWithMock.makeGetRequest(url, headers);
     Request actualRequest = checkMakeRequestAndExtractParameter();
 
     assertRequestsEqual(expectedRequest, actualRequest);

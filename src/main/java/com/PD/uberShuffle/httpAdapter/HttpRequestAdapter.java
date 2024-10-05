@@ -7,7 +7,7 @@ import java.util.Map;
 public interface HttpRequestAdapter {
     JSONObject makeGetRequest(String url);
 
-    JSONObject makeGetRequestWithHeaders(String url, Map<String, String> headers);
+    JSONObject makeGetRequest(String url, Map<String, String> headers);
 
     JSONObject makePostRequest(String url);
 
