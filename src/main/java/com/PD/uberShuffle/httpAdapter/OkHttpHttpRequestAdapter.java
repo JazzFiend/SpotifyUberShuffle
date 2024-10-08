@@ -44,8 +44,8 @@ public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
 
   @Override
   public JSONObject makePostRequest(String url, Map<String, String> bodyParameters) {
-    final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    RequestBody body = RequestBody.create(new JSONObject(bodyParameters).toString(), JSON);
+    final MediaType jsonMediaType = MediaType.get("application/json; charset=utf-8");
+    RequestBody body = RequestBody.create(new JSONObject(bodyParameters).toString(), jsonMediaType);
     Request request = new Request.Builder()
         .post(body)
         .header(AUTH_HEADER, accessToken)

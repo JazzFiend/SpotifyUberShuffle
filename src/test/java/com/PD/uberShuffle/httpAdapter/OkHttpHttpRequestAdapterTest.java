@@ -1,7 +1,6 @@
 package com.PD.uberShuffle.httpAdapter;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -100,7 +99,7 @@ class OkHttpHttpRequestAdapterTest {
     final MediaType jsonMediaType = MediaType.get("application/json; charset=utf-8");
 
     @Test
-    void postRequestTest() {
+    void postRequestTest() throws IOException {
       RequestBody body = createBodyParameters(new HashMap<>());
       Request expectedRequest = new Builder()
           .post(body)
@@ -111,11 +110,11 @@ class OkHttpHttpRequestAdapterTest {
 
       Request actualRequest = checkMakeRequestAndExtractParameter();
       assertRequestsEqual(expectedRequest, actualRequest);
-      assertThat(expectedRequest.body(), is(notNullValue()));
+      assertBodyParamsEqual(expectedRequest, actualRequest);
     }
 
     @Test
-    void postRequestWithBodyParamsTest() {
+    void postRequestWithBodyParamsTest() throws IOException {
       Map<String, String> bodyMap = new HashMap<>();
       bodyMap.put("BodyParam1", "val1");
       RequestBody body = createBodyParameters(bodyMap);
@@ -128,43 +127,36 @@ class OkHttpHttpRequestAdapterTest {
 
       Request actualRequest = checkMakeRequestAndExtractParameter();
       assertRequestsEqual(expectedRequest, actualRequest);
-      assertThat(expectedRequest.body(), is(notNullValue()));
+      assertBodyParamsEqual(expectedRequest, actualRequest);
+    }
+
+    @Test
+    void postRequestWithHeadersTest() throws IOException {
+      Map<String, String> bodyMap = new HashMap<>();
+      bodyMap.put("param", "value");
+      Map<String, String> headerMap = new HashMap<>();
+      headerMap.put("Authorization", accessToken);
+      headerMap.put("Host", "Value");
+
+      final MediaType json = MediaType.get("application/json; charset=utf-8");
+      RequestBody expectedBody = RequestBody.create(new JSONObject(bodyMap).toString(), json);
+      Request expectedRequest = new Builder()
+          .post(expectedBody)
+          .header("Authorization", accessToken)
+          .header("Host", "Value")
+          .url(url)
+          .build();
+
+      httpWithMock.makePostRequest(url, bodyMap, headerMap);
+      Request actualRequest = checkMakeRequestAndExtractParameter();
+
+      assertRequestsEqual(expectedRequest, actualRequest);
+      assertBodyParamsEqual(expectedRequest, actualRequest);
     }
 
     private RequestBody createBodyParameters(Map<String, String> bodyPairs) {
       return RequestBody.create(new JSONObject(bodyPairs).toString(), jsonMediaType);
     }
-  }
-
-  // Now fix up these post requests
-
-
-
-
-  // Okay, this test is working. But the rest of the tests aren't actually checking anything. I'm
-  // going to fix up the other tests using Mockito.
-  @Test
-  void postRequestWithHeadersTest() throws IOException {
-    Map<String, String> bodyParams = new HashMap<>();
-    bodyParams.put("param", "value");
-    Map<String, String> headers = new HashMap<>();
-    headers.put("Authorization", accessToken);
-    headers.put("AnotherHeader", "Value");
-
-    final MediaType json = MediaType.get("application/json; charset=utf-8");
-    RequestBody expectedBody = RequestBody.create(new JSONObject(bodyParams).toString(), json);
-    Request expectedRequest = new Builder()
-        .post(expectedBody)
-        .header("Authorization", accessToken)
-        .header("AnotherHeader", "Value")
-        .url(url)
-        .build();
-
-    httpWithMock.makePostRequest(url, bodyParams, headers);
-    Request actualRequest = checkMakeRequestAndExtractParameter();
-
-    assertRequestsEqual(expectedRequest, actualRequest);
-    assertBodyParamsEqual(expectedRequest, actualRequest);
   }
 
   private Request checkMakeRequestAndExtractParameter() {
