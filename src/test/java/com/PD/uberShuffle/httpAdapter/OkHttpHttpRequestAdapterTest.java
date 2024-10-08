@@ -1,8 +1,8 @@
 package com.PD.uberShuffle.httpAdapter;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 
 import com.PD.mocks.OkHttpCallerMock;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import okhttp3.MediaType;
@@ -20,7 +19,6 @@ import okhttp3.Request;
 import okhttp3.Request.Builder;
 import okhttp3.RequestBody;
 import org.json.JSONObject;
-import org.json.JSONWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -99,10 +97,11 @@ class OkHttpHttpRequestAdapterTest {
 
   @Nested
   class PostTests {
+    final MediaType jsonMediaType = MediaType.get("application/json; charset=utf-8");
+
     @Test
-    void postRequestTest() throws IOException {
-      final MediaType jsonMediaType = MediaType.get("application/json; charset=utf-8");
-      RequestBody body = RequestBody.create(new JSONObject(new HashMap<>()).toString(), jsonMediaType);
+    void postRequestTest() {
+      RequestBody body = createBodyParameters(new HashMap<>());
       Request expectedRequest = new Builder()
           .post(body)
           .url(url)
@@ -112,35 +111,35 @@ class OkHttpHttpRequestAdapterTest {
 
       Request actualRequest = checkMakeRequestAndExtractParameter();
       assertRequestsEqual(expectedRequest, actualRequest);
-      assertThat(expectedRequest.body().contentLength(), is(2L));
+      assertThat(expectedRequest.body(), is(notNullValue()));
+    }
+
+    @Test
+    void postRequestWithBodyParamsTest() {
+      Map<String, String> bodyMap = new HashMap<>();
+      bodyMap.put("BodyParam1", "val1");
+      RequestBody body = createBodyParameters(bodyMap);
+      Request expectedRequest = new Builder()
+          .post(body)
+          .url(url)
+          .header("Authorization", accessToken)
+          .build();
+      httpWithMock.makePostRequest(url, bodyMap);
+
+      Request actualRequest = checkMakeRequestAndExtractParameter();
+      assertRequestsEqual(expectedRequest, actualRequest);
+      assertThat(expectedRequest.body(), is(notNullValue()));
+    }
+
+    private RequestBody createBodyParameters(Map<String, String> bodyPairs) {
+      return RequestBody.create(new JSONObject(bodyPairs).toString(), jsonMediaType);
     }
   }
 
   // Now fix up these post requests
 
 
-  @Test
-  public void postRequestWithBodyParamsTest() {
-    StringWriter sw = new StringWriter();
-    new JSONWriter(sw)
-        .object()
-        .key("Authorization")
-        .value(accessToken)
-        .key("url")
-        .value(url)
-        .key("method")
-        .value("POST")
-        .endObject();
-    JSONObject expected = new JSONObject(sw.toString());
-    Map<String, String> bodyParams = new HashMap<>();
-    bodyParams.put("param", "value");
 
-    JSONObject actual = http.makePostRequest(url, bodyParams);
-
-    assertEquals(actual.get("Authorization"), expected.get("Authorization"));
-    assertEquals(actual.get("url"), expected.get("url"));
-    assertEquals(actual.get("method"), expected.get("method"));
-  }
 
   // Okay, this test is working. But the rest of the tests aren't actually checking anything. I'm
   // going to fix up the other tests using Mockito.
