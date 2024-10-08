@@ -97,27 +97,27 @@ class OkHttpHttpRequestAdapterTest {
     }
   }
 
+  @Nested
+  class PostTests {
+    @Test
+    void postRequestTest() throws IOException {
+      final MediaType jsonMediaType = MediaType.get("application/json; charset=utf-8");
+      RequestBody body = RequestBody.create(new JSONObject(new HashMap<>()).toString(), jsonMediaType);
+      Request expectedRequest = new Builder()
+          .post(body)
+          .url(url)
+          .header("Authorization", accessToken)
+          .build();
+      httpWithMock.makePostRequest(url);
 
-
-  @Test
-  public void postRequestTest() {
-    StringWriter sw = new StringWriter();
-    new JSONWriter(sw)
-        .object()
-        .key("Authorization")
-        .value(accessToken)
-        .key("url")
-        .value(url)
-        .key("method")
-        .value("POST")
-        .endObject();
-    JSONObject expected = new JSONObject(sw.toString());
-    JSONObject actual = http.makePostRequest(url);
-
-    assertEquals(actual.get("Authorization"), expected.get("Authorization"));
-    assertEquals(actual.get("url"), expected.get("url"));
-    assertEquals(actual.get("method"), expected.get("method"));
+      Request actualRequest = checkMakeRequestAndExtractParameter();
+      assertRequestsEqual(expectedRequest, actualRequest);
+      assertThat(expectedRequest.body().contentLength(), is(2L));
+    }
   }
+
+  // Now fix up these post requests
+
 
   @Test
   public void postRequestWithBodyParamsTest() {
