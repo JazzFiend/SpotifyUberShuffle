@@ -16,6 +16,7 @@ import java.util.Map;
 public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
 
   public static final String AUTH_HEADER = "Authorization";
+  public static final String APPLICATION_JSON_CHARSET = "application/json; charset=utf-8";
   private final HttpCaller httpCaller;
   private String accessToken;
 
@@ -47,7 +48,7 @@ public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
 
   @Override
   public JSONObject makePostRequest(String url, Map<String, String> bodyParameters) {
-    final MediaType jsonMediaType = MediaType.get("application/json; charset=utf-8");
+    final MediaType jsonMediaType = MediaType.get(APPLICATION_JSON_CHARSET);
     RequestBody body = RequestBody.create(new JSONObject(bodyParameters).toString(), jsonMediaType);
     Request request = new Request.Builder()
         .post(body)
@@ -60,7 +61,7 @@ public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
 
   public JSONObject makePostRequest(String url, Map<String, String> bodyParameters, Map<String, String> headers) {
     Map<String, String> headersWithAccessToken = addAccessTokenToHeaders(headers);
-    final MediaType json = MediaType.get("application/json; charset=utf-8");
+    final MediaType json = MediaType.get(APPLICATION_JSON_CHARSET);
     RequestBody body = RequestBody.create(new JSONObject(bodyParameters).toString(), json);
     Request request = new Request.Builder()
         .post(body)
@@ -74,7 +75,7 @@ public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
   @Override
   public JSONObject makePostRequestNoAuth(String url, Map<String, String> bodyParams,
       Map<String, String> headers) {
-    final MediaType json = MediaType.get("application/json; charset=utf-8");
+    final MediaType json = MediaType.get(APPLICATION_JSON_CHARSET);
     RequestBody body = RequestBody.create(new JSONObject(bodyParams).toString(), json);
     Request request = new Request.Builder()
         .post(body)
