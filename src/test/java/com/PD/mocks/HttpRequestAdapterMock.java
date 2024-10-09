@@ -86,4 +86,10 @@ public class HttpRequestAdapterMock implements HttpRequestAdapter {
         Map<String, String> headers) {
         return null;
     }
+
+    @Override
+    public JSONObject makePostRequestNoAuth(String url, Map<String, String> bodyParams,
+        Map<String, String> headers) {
+        return null;
+    }
 }

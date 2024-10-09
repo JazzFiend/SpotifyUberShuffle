@@ -154,6 +154,28 @@ class OkHttpHttpRequestAdapterTest {
       assertBodyParamsEqual(expectedRequest, actualRequest);
     }
 
+    @Test
+    void postRequestNoAuthTest() throws IOException {
+      Map<String, String> bodyMap = new HashMap<>();
+      bodyMap.put("BodyParam", "value");
+      Map<String, String> headerMap = new HashMap<>();
+      headerMap.put("Host", "HostValue");
+
+      final MediaType json = MediaType.get("application/json; charset=utf-8");
+      RequestBody expectedBody = RequestBody.create(new JSONObject(bodyMap).toString(), json);
+      Request expectedRequest = new Builder()
+        .post(expectedBody)
+        .header("Host", "HostValue")
+        .url(url)
+        .build();
+
+      httpWithMock.makePostRequestNoAuth(url, bodyMap, headerMap);
+      Request actualRequest = checkMakeRequestAndExtractParameter();
+
+      assertRequestsEqual(expectedRequest, actualRequest);
+      assertBodyParamsEqual(expectedRequest, actualRequest);
+    }
+
     private RequestBody createBodyParameters(Map<String, String> bodyPairs) {
       return RequestBody.create(new JSONObject(bodyPairs).toString(), jsonMediaType);
     }

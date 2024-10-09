@@ -10,6 +10,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+// FIXME: I think a lot of the problems with this class are stemming from the fact that we are
+//  storing the accessToken here. Soon we'll have an authentication class that will be much better
+//  suited for holding it. Once that is done, look to extract the authentication from here.
 public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
 
   public static final String AUTH_HEADER = "Authorization";
@@ -56,8 +59,23 @@ public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
   }
 
   public JSONObject makePostRequest(String url, Map<String, String> bodyParameters, Map<String, String> headers) {
+    Map<String, String> headersWithAccessToken = addAccessTokenToHeaders(headers);
     final MediaType json = MediaType.get("application/json; charset=utf-8");
     RequestBody body = RequestBody.create(new JSONObject(bodyParameters).toString(), json);
+    Request request = new Request.Builder()
+        .post(body)
+        .headers(Headers.of(headersWithAccessToken))
+        .url(url)
+        .build();
+
+    return makeRequest(request);
+  }
+
+  @Override
+  public JSONObject makePostRequestNoAuth(String url, Map<String, String> bodyParams,
+      Map<String, String> headers) {
+    final MediaType json = MediaType.get("application/json; charset=utf-8");
+    RequestBody body = RequestBody.create(new JSONObject(bodyParams).toString(), json);
     Request request = new Request.Builder()
         .post(body)
         .headers(Headers.of(headers))
