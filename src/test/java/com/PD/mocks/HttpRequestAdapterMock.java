@@ -44,6 +44,11 @@ public class HttpRequestAdapterMock implements HttpRequestAdapter {
     }
 
     @Override
+    public JSONObject makeGetRequest(String url, Map<String, String> headers) {
+        return null;
+    }
+
+    @Override
     public JSONObject makePostRequest(String url) {
         return makePostRequest(url, new HashMap<>());
     }
@@ -74,5 +79,17 @@ public class HttpRequestAdapterMock implements HttpRequestAdapter {
     @Override
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    @Override
+    public JSONObject makePostRequest(String url, Map<String, String> bodyParams,
+        Map<String, String> headers) {
+        return null;
+    }
+
+    @Override
+    public JSONObject makePostRequestNoAuth(String url, Map<String, String> bodyParams,
+        Map<String, String> headers) {
+        return null;
     }
 }

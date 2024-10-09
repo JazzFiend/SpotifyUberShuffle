@@ -32,12 +32,12 @@ class AuthenticationTest {
     System.out.println(authorizationCurl);
     assertNotNull(authorizationCurl);
   }
-
   @Test
   void accessTokenCurl() {
     String code = "Replace with response from previous test";
     String codeVerifier = "Replace with code verifier generated in previous test";
     String accessTokenCurl = Authentication.generateAccessTokenCurl(code, CLIENT_ID, codeVerifier);
     System.out.println(accessTokenCurl);
+    assertNotNull(accessTokenCurl);
   }
 }
