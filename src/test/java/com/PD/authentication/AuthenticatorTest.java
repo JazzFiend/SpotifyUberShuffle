@@ -5,11 +5,23 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import com.PD.uberShuffle.httpAdapter.HttpRequestAdapter;
+import com.PD.uberShuffle.httpAdapter.HumbleOkHttpCallerImpl;
+import com.PD.uberShuffle.httpAdapter.OkHttpCaller;
+import com.PD.uberShuffle.httpAdapter.OkHttpHttpRequestAdapter;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -54,12 +66,53 @@ class AuthenticatorTest {
     }
   }
 
+  // First try this out for real. Then Refactor.
+  @Test
+  void requestAccessToken() {
+    HttpRequestAdapter http = mock();
+    String getAccessTokenEndpoint = "https://accounts.spotify.com/api/token";
 
-  // Right now, my HTTP protocol doesn't support specifying headers. I'm going to open a new PR that allows that.
+    JSONObject expectedResponse = new JSONObject();
+    expectedResponse.put("access_token", "Token");
+    expectedResponse.put("token_type", "Bearer");
+    expectedResponse.put("scope", "Scopes");
+    expectedResponse.put("expires_in", "10000");
+    expectedResponse.put("refresh_token", "Refresh");
+
+    Map<String, String> expectedBodyParams = new HashMap<>();
+    expectedBodyParams.put("grant_type", "authorization_code");
+    expectedBodyParams.put("code", auth.getAuthenticationCode());
+    expectedBodyParams.put("redirect_uri", "http://localhost:8080");
+    expectedBodyParams.put("client_id", CLIENT_ID);
+    expectedBodyParams.put("code_verifier", auth.getCodeChallenge());
+
+    Map<String, String> expectedHeaders = new HashMap<>();
+    expectedHeaders.put("Content-Type", "application/x-www-form-urlencoded");
+
+    when(http.makePostRequestNoAuth(getAccessTokenEndpoint, expectedBodyParams, expectedHeaders)).thenReturn(expectedResponse);
+
+    auth.requestAccessToken(http, CLIENT_ID);
+    assertThat(auth.getAccessToken(), is("Bearer Token"));
+  }
+
+  // Something is wrong with the call. It's coming back with 400. But I should refactor what I have
+  // first and then address this.
 //  @Test
-//  void requestAccessToken() {
-//    auth.requestAccessToken();
-//    assertThat(auth.getAccessToken(), is("Bearer Token"));
+//  void acceptanceTest() throws NoSuchAlgorithmException, IncorrectStateException {
+//    String clientId = "";
+//    var acceptanceAuth = new SpotifyAuthorization();
+//    var authUrl = acceptanceAuth.generateAuthorizationUrl(clientId);
+//    String toBrowser = authUrl.toString();
+//
+//    String fromBrowser = "";
+//    var authResponse = new AuthorizationResponse(fromBrowser);
+//    acceptanceAuth.hydrateWithAuthorizationResponse(authResponse);
+//
+//
+//    var okHttp = new OkHttpHttpRequestAdapter(new OkHttpCaller(new HumbleOkHttpCallerImpl()));
+//
+//    acceptanceAuth.requestAccessToken(okHttp, clientId);
+//    assertThat(acceptanceAuth.getAccessToken(), isNotNull());
 //  }
 
   private static void checkEndpoint(String authorizationUrl) {

@@ -76,6 +76,7 @@ public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
   public JSONObject makePostRequestNoAuth(String url, Map<String, String> bodyParams,
       Map<String, String> headers) {
     final MediaType json = MediaType.get(APPLICATION_JSON_CHARSET);
+//    final MediaType json = MediaType.get("application/x-www-form-urlencoded");
     RequestBody body = RequestBody.create(new JSONObject(bodyParams).toString(), json);
     Request request = new Request.Builder()
         .post(body)

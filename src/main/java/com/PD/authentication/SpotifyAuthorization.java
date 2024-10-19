@@ -9,8 +9,11 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import lombok.Getter;
+import org.json.JSONObject;
 
 public class SpotifyAuthorization {
   private static final Random rng = new Random();
@@ -18,6 +21,7 @@ public class SpotifyAuthorization {
   private AuthorizationUrl authUrl;
   @Getter private String authenticationCode;
   @Getter private String accessToken;
+  @Getter private String codeChallenge;
 
   public SpotifyAuthorization() {
     authenticationCode = "";
@@ -25,7 +29,8 @@ public class SpotifyAuthorization {
 
   public AuthorizationUrl generateAuthorizationUrl(String clientId) throws NoSuchAlgorithmException {
     String state = generateRandomString(16);
-    String codeChallenge = generateCodeChallenge(generateRandomString(128));
+    // This function is doing too much! It stores the code challenge and creates an auth url
+    this.codeChallenge = generateCodeChallenge(generateRandomString(128));
     authUrl = new AuthorizationUrl(clientId, state, codeChallenge);
     return authUrl;
   }
@@ -38,16 +43,26 @@ public class SpotifyAuthorization {
     this.authenticationCode = authResponse.getAuthenticationCode();
   }
 
-//  public void requestAccessToken() {
-//    HumbleOkHttpCallerImpl callerImpl = new HumbleOkHttpCallerImpl();
-//    HttpCaller caller = new OkHttpCaller(callerImpl);
-//    HttpRequestAdapter http = new OkHttpHttpRequestAdapter(caller);
-//
-//    String getAccessTokenEndpoint = "https://accounts.spotify.com/api/token";
-//
-//    http.makePostRequest()
-//
-//  }
+  public void requestAccessToken(HttpRequestAdapter http, String clientId) {
+    String getAccessTokenEndpoint = "https://accounts.spotify.com/api/token";
+
+    Map<String, String> bodyParams = new HashMap<>();
+    bodyParams.put("grant_type", "authorization_code");
+    bodyParams.put("code", authenticationCode);
+    // This value needs to exactly match the one in the AuthorizaionUri class. It should only be stored in one place.
+    bodyParams.put("redirect_uri", "http://localhost:8080");
+    // Should we enter clientId into the constructor?
+    bodyParams.put("client_id", clientId);
+    bodyParams.put("code_verifier", codeChallenge);
+
+    Map<String, String> headers = new HashMap<>();
+    headers.put("Content-Type", "application/x-www-form-urlencoded");
+
+    JSONObject response = http.makePostRequestNoAuth(getAccessTokenEndpoint, bodyParams, headers);
+
+    this.accessToken = response.getString("token_type") + " " + response.getString("access_token");
+    // Also getting a Refresh Token here, but I'll deal with that later.
+  }
 
   // Do I want to catch the exception here? What is it doing for me?
   private static String generateCodeChallenge(String codeVerifier) throws NoSuchAlgorithmException {
