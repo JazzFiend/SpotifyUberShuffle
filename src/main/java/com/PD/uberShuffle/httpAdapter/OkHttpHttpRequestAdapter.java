@@ -1,5 +1,6 @@
 package com.PD.uberShuffle.httpAdapter;
 
+import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -75,9 +76,11 @@ public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
   @Override
   public JSONObject makePostRequestNoAuth(String url, Map<String, String> bodyParams,
       Map<String, String> headers) {
-    final MediaType json = MediaType.get(APPLICATION_JSON_CHARSET);
-//    final MediaType json = MediaType.get("application/x-www-form-urlencoded");
-    RequestBody body = RequestBody.create(new JSONObject(bodyParams).toString(), json);
+//    final MediaType json = MediaType.get(APPLICATION_JSON_CHARSET);
+//    final MediaType mediaType = MediaType.get("application/x-www-form-urlencoded");
+    FormBody.Builder formBuilder = new FormBody.Builder();
+    bodyParams.forEach(formBuilder::add);
+    RequestBody body = formBuilder.build();
     Request request = new Request.Builder()
         .post(body)
         .headers(Headers.of(headers))

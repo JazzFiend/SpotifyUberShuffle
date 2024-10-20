@@ -18,6 +18,11 @@ public class OkHttpCaller implements HttpCaller {
         int retryCountMax = 5;
         for (int i = 0; i < retryCountMax; i++) {
             try (Response response = humbleHttp.makeNewCall(request)) {
+
+                // Can only pull body once... That's dumb.
+//                System.out.println("Response Code: " + response.code());
+//                System.out.println("Response Body: " + response.body().string());
+
                 JSONObject jsonRes = extractBody(response);
                 if (isErrorPresent(jsonRes)) {
                     handleResponseError(response, jsonRes);

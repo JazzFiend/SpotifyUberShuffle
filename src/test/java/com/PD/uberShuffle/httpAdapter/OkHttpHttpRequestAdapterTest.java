@@ -13,6 +13,7 @@ import com.PD.mocks.OkHttpCallerMock;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.Request.Builder;
@@ -161,8 +162,9 @@ class OkHttpHttpRequestAdapterTest {
       Map<String, String> headerMap = new HashMap<>();
       headerMap.put("Host", "HostValue");
 
-      final MediaType json = MediaType.get("application/json; charset=utf-8");
-      RequestBody expectedBody = RequestBody.create(new JSONObject(bodyMap).toString(), json);
+      FormBody.Builder formBuilder = new FormBody.Builder();
+      bodyMap.forEach(formBuilder::add);
+      RequestBody expectedBody = formBuilder.build();
       Request expectedRequest = new Builder()
         .post(expectedBody)
         .header("Host", "HostValue")

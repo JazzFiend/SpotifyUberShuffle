@@ -21,6 +21,7 @@ public class SpotifyAuthorization {
   private AuthorizationUrl authUrl;
   @Getter private String authenticationCode;
   @Getter private String accessToken;
+  private String codeVerifier;
   @Getter private String codeChallenge;
 
   public SpotifyAuthorization() {
@@ -30,7 +31,8 @@ public class SpotifyAuthorization {
   public AuthorizationUrl generateAuthorizationUrl(String clientId) throws NoSuchAlgorithmException {
     String state = generateRandomString(16);
     // This function is doing too much! It stores the code challenge and creates an auth url
-    this.codeChallenge = generateCodeChallenge(generateRandomString(128));
+    this.codeVerifier = generateRandomString(128);
+    this.codeChallenge = generateCodeChallenge(codeVerifier);
     authUrl = new AuthorizationUrl(clientId, state, codeChallenge);
     return authUrl;
   }
@@ -53,7 +55,7 @@ public class SpotifyAuthorization {
     bodyParams.put("redirect_uri", "http://localhost:8080");
     // Should we enter clientId into the constructor?
     bodyParams.put("client_id", clientId);
-    bodyParams.put("code_verifier", codeChallenge);
+    bodyParams.put("code_verifier", codeVerifier);
 
     Map<String, String> headers = new HashMap<>();
     headers.put("Content-Type", "application/x-www-form-urlencoded");

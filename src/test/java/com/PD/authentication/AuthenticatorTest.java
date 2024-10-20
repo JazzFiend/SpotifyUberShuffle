@@ -95,25 +95,26 @@ class AuthenticatorTest {
     assertThat(auth.getAccessToken(), is("Bearer Token"));
   }
 
-  // Something is wrong with the call. It's coming back with 400. But I should refactor what I have
-  // first and then address this.
-//  @Test
-//  void acceptanceTest() throws NoSuchAlgorithmException, IncorrectStateException {
-//    String clientId = "";
-//    var acceptanceAuth = new SpotifyAuthorization();
-//    var authUrl = acceptanceAuth.generateAuthorizationUrl(clientId);
-//    String toBrowser = authUrl.toString();
-//
-//    String fromBrowser = "";
-//    var authResponse = new AuthorizationResponse(fromBrowser);
-//    acceptanceAuth.hydrateWithAuthorizationResponse(authResponse);
-//
-//
-//    var okHttp = new OkHttpHttpRequestAdapter(new OkHttpCaller(new HumbleOkHttpCallerImpl()));
-//
-//    acceptanceAuth.requestAccessToken(okHttp, clientId);
-//    assertThat(acceptanceAuth.getAccessToken(), isNotNull());
-//  }
+  // OMFG IT WORKS. Get the tests to pass and commit this. Put in a bunch of TODOs and fix them up in a different PR.
+  // Once I have a proper acceptance test, get rid of this.
+  @Test
+  @Disabled
+  void acceptanceTest() throws NoSuchAlgorithmException, IncorrectStateException {
+    String clientId = "47e70434159244f3bbf61bb163323ac5";
+    var acceptanceAuth = new SpotifyAuthorization();
+    var authUrl = acceptanceAuth.generateAuthorizationUrl(clientId);
+    String toBrowser = authUrl.toString();
+
+    String fromBrowser = "";
+    var authResponse = new AuthorizationResponse(fromBrowser);
+    acceptanceAuth.hydrateWithAuthorizationResponse(authResponse);
+
+
+    var okHttp = new OkHttpHttpRequestAdapter(new OkHttpCaller(new HumbleOkHttpCallerImpl()));
+
+    acceptanceAuth.requestAccessToken(okHttp, clientId);
+    assertThat(acceptanceAuth.getAccessToken(), isNotNull());
+  }
 
   private static void checkEndpoint(String authorizationUrl) {
     String[] endpointAndParams = authorizationUrl.split("\\?");
