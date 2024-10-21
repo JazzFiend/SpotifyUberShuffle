@@ -19,7 +19,8 @@ public class OkHttpCaller implements HttpCaller {
         for (int i = 0; i < retryCountMax; i++) {
             try (Response response = humbleHttp.makeNewCall(request)) {
 
-                // Can only pull body once... That's dumb.
+                // TODO: I should be more robust with the response here. If its an error, throw and
+                // include the message.
 //                System.out.println("Response Code: " + response.code());
 //                System.out.println("Response Body: " + response.body().string());
 

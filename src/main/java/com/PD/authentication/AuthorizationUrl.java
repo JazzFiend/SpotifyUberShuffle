@@ -2,8 +2,6 @@ package com.PD.authentication;
 
 import lombok.Getter;
 
-// Should this live in the model folder?
-
 public class AuthorizationUrl {
   private final String clientId;
   @Getter private final String state;

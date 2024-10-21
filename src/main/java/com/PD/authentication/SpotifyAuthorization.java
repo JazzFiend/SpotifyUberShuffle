@@ -1,10 +1,6 @@
 package com.PD.authentication;
 
-import com.PD.uberShuffle.httpAdapter.HttpCaller;
 import com.PD.uberShuffle.httpAdapter.HttpRequestAdapter;
-import com.PD.uberShuffle.httpAdapter.HumbleOkHttpCallerImpl;
-import com.PD.uberShuffle.httpAdapter.OkHttpCaller;
-import com.PD.uberShuffle.httpAdapter.OkHttpHttpRequestAdapter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -15,6 +11,7 @@ import java.util.Random;
 import lombok.Getter;
 import org.json.JSONObject;
 
+// TODO: Is this named correctly?
 public class SpotifyAuthorization {
   private static final Random rng = new Random();
   private static final String POSSIBLE_VALUES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
@@ -30,7 +27,7 @@ public class SpotifyAuthorization {
 
   public AuthorizationUrl generateAuthorizationUrl(String clientId) throws NoSuchAlgorithmException {
     String state = generateRandomString(16);
-    // This function is doing too much! It stores the code challenge and creates an auth url
+    // TODO: This function is doing too much! It stores the code challenge and creates an auth url
     this.codeVerifier = generateRandomString(128);
     this.codeChallenge = generateCodeChallenge(codeVerifier);
     authUrl = new AuthorizationUrl(clientId, state, codeChallenge);
@@ -51,9 +48,9 @@ public class SpotifyAuthorization {
     Map<String, String> bodyParams = new HashMap<>();
     bodyParams.put("grant_type", "authorization_code");
     bodyParams.put("code", authenticationCode);
-    // This value needs to exactly match the one in the AuthorizaionUri class. It should only be stored in one place.
+    // TODO: This value needs to exactly match the one in the AuthorizaionUri class. It should only be stored in one place.
     bodyParams.put("redirect_uri", "http://localhost:8080");
-    // Should we enter clientId into the constructor?
+    // TODO: Should we enter clientId into the constructor?
     bodyParams.put("client_id", clientId);
     bodyParams.put("code_verifier", codeVerifier);
 
@@ -63,10 +60,10 @@ public class SpotifyAuthorization {
     JSONObject response = http.makePostRequestNoAuth(getAccessTokenEndpoint, bodyParams, headers);
 
     this.accessToken = response.getString("token_type") + " " + response.getString("access_token");
-    // Also getting a Refresh Token here, but I'll deal with that later.
+    // TODO: Also getting a Refresh Token here, but I'll deal with that later.
   }
 
-  // Do I want to catch the exception here? What is it doing for me?
+  // TODO: Do I want to catch the exception here? What is it doing for me?
   private static String generateCodeChallenge(String codeVerifier) throws NoSuchAlgorithmException {
     byte[] data = codeVerifier.getBytes(StandardCharsets.US_ASCII);
     MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");

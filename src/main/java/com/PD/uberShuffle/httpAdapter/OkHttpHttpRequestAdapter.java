@@ -73,11 +73,11 @@ public class OkHttpHttpRequestAdapter implements HttpRequestAdapter {
     return makeRequest(request);
   }
 
+  // TODO: This function and the one before it use different MediaTypes. Figure out how to specify
+  //  it in a cleaner way.
   @Override
   public JSONObject makePostRequestNoAuth(String url, Map<String, String> bodyParams,
       Map<String, String> headers) {
-//    final MediaType json = MediaType.get(APPLICATION_JSON_CHARSET);
-//    final MediaType mediaType = MediaType.get("application/x-www-form-urlencoded");
     FormBody.Builder formBuilder = new FormBody.Builder();
     bodyParams.forEach(formBuilder::add);
     RequestBody body = formBuilder.build();

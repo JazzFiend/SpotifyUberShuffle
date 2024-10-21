@@ -40,8 +40,6 @@ class AuthenticatorTest {
     checkParams(authUrl);
   }
 
-  // Sample Response URL: http://localhost:8080/?code=AQDDn6dvLsCBA_g9FBN-lgMf72UcGtrfhbbThNLbzRx8xF-xfD7pbNxo_lw6b2jrFFKtZnKcB6MG3_nfPlqwtyQMrn9adQP_R_ImH0xV737QhPmRPjNyndkqmNarN2sSHSFrxLcIZWFr0eoCSlvc0ZYgZ28dADykE--y3pNRdBAgsYA7seGeBvsSalp2X6OC0xzaEQnDs430aziUcpCZccaQLWOPEAUJdWyWjFfJRrWCHHQ9BinJq6pFYEiWdI9KNKpkgWms5vY8UyAluy7ZL0c1s88aJXjBLTX_62louxBOMsnPfFzSxcT0ZvPcrwBF&state=5LIC_AJoZhlAibch
-
   @Nested
   class EnterAuthorizationResponse {
     @Test
@@ -66,7 +64,6 @@ class AuthenticatorTest {
     }
   }
 
-  // First try this out for real. Then Refactor.
   @Test
   void requestAccessToken() {
     HttpRequestAdapter http = mock();
@@ -95,12 +92,11 @@ class AuthenticatorTest {
     assertThat(auth.getAccessToken(), is("Bearer Token"));
   }
 
-  // OMFG IT WORKS. Get the tests to pass and commit this. Put in a bunch of TODOs and fix them up in a different PR.
   // Once I have a proper acceptance test, get rid of this.
   @Test
   @Disabled
   void acceptanceTest() throws NoSuchAlgorithmException, IncorrectStateException {
-    String clientId = "47e70434159244f3bbf61bb163323ac5";
+    String clientId = "INSERT CLIENT ID HERE";
     var acceptanceAuth = new SpotifyAuthorization();
     var authUrl = acceptanceAuth.generateAuthorizationUrl(clientId);
     String toBrowser = authUrl.toString();
