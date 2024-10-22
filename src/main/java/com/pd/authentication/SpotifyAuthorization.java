@@ -4,23 +4,23 @@ import com.pd.uber_shuffle.http_adapter.HttpRequestAdapter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import lombok.Getter;
 import org.json.JSONObject;
 
 public class SpotifyAuthorization {
-  private static final Random rng = new Random();
+  private static final SecureRandom rng = new SecureRandom();
   private static final String POSSIBLE_VALUES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
   private static final String REDIRECT_URI = "http://localhost:8080";
+  private final String clientId;
   @Getter private final String state;
   @Getter private String authenticationCode;
   @Getter private String accessToken;
   @Getter private final String codeVerifier;
   @Getter private final String codeChallenge;
-  private final String clientId;
 
   public SpotifyAuthorization(String clientId) {
     authenticationCode = "";
