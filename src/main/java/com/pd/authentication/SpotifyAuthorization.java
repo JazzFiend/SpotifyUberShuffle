@@ -26,12 +26,7 @@ public class SpotifyAuthorization {
     authenticationCode = "";
     this.state = generateRandomString(16);
     this.codeVerifier = generateRandomString(128);
-    // Can I get away with not throwing anything?
-    try {
-      this.codeChallenge = generateCodeChallenge(codeVerifier);
-    } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e);
-    }
+    this.codeChallenge = generateCodeChallenge(codeVerifier);
     this.clientId = clientId;
   }
 
@@ -66,12 +61,15 @@ public class SpotifyAuthorization {
     // TODO: Also getting a Refresh Token here, but I'll deal with that later.
   }
 
-  // TODO: Do I want to catch the exception here? What is it doing for me?
-  private static String generateCodeChallenge(String codeVerifier) throws NoSuchAlgorithmException {
-    byte[] data = codeVerifier.getBytes(StandardCharsets.US_ASCII);
-    MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-    byte[] digest = messageDigest.digest(data);
-    return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
+  private static String generateCodeChallenge(String codeVerifier) {
+    try {
+      byte[] data = codeVerifier.getBytes(StandardCharsets.US_ASCII);
+      MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+      byte[] digest = messageDigest.digest(data);
+      return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
+    } catch(NoSuchAlgorithmException e) {
+      throw new RuntimeException(e.getMessage());
+    }
   }
 
   private static String generateRandomString(int size) {
