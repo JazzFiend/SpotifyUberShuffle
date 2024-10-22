@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -14,7 +13,6 @@ import com.pd.uber_shuffle.http_adapter.HttpRequestAdapter;
 import com.pd.uber_shuffle.http_adapter.HumbleOkHttpCallerImpl;
 import com.pd.uber_shuffle.http_adapter.OkHttpCaller;
 import com.pd.uber_shuffle.http_adapter.OkHttpHttpRequestAdapter;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +23,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-class AuthenticatorTest {
+class SpotifyAuthorizationTest {
   private static final String CLIENT_ID = "clientId";
   SpotifyAuthorization auth;
   @BeforeEach
