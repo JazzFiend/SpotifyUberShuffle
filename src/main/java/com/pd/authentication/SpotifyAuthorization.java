@@ -4,53 +4,51 @@ import com.pd.uber_shuffle.http_adapter.HttpRequestAdapter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import lombok.Getter;
 import org.json.JSONObject;
 
-// TODO: Is this named correctly?
 public class SpotifyAuthorization {
-  private static final Random rng = new Random();
+  private static final SecureRandom rng = new SecureRandom();
   private static final String POSSIBLE_VALUES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-";
-  private AuthorizationUrl authUrl;
+  private static final String REDIRECT_URI = "http://localhost:8080";
+  private final String clientId;
+  @Getter private final String state;
   @Getter private String authenticationCode;
   @Getter private String accessToken;
-  private String codeVerifier;
-  @Getter private String codeChallenge;
+  @Getter private final String codeVerifier;
+  @Getter private final String codeChallenge;
 
-  public SpotifyAuthorization() {
+  public SpotifyAuthorization(String clientId) {
     authenticationCode = "";
-  }
-
-  public AuthorizationUrl generateAuthorizationUrl(String clientId) throws NoSuchAlgorithmException {
-    String state = generateRandomString(16);
-    // TODO: This function is doing too much! It stores the code challenge and creates an auth url
+    this.state = generateRandomString(16);
     this.codeVerifier = generateRandomString(128);
     this.codeChallenge = generateCodeChallenge(codeVerifier);
-    authUrl = new AuthorizationUrl(clientId, state, codeChallenge);
-    return authUrl;
+    this.clientId = clientId;
   }
 
-  public void hydrateWithAuthorizationResponse(AuthorizationResponse authResponse)
+  public AuthorizationUrl generateAuthorizationUrl() {
+    return new AuthorizationUrl(clientId, state, codeChallenge, REDIRECT_URI);
+  }
+
+  public void giveAuthorizationResponse(AuthorizationResponse authResponse)
       throws IncorrectStateException {
-    if(!authResponse.getState().equals(authUrl.getState())) { throw new IncorrectStateException(
+    if(!authResponse.getState().equals(state)) { throw new IncorrectStateException(
         "Response state did not match the requested state"); }
 
     this.authenticationCode = authResponse.getAuthenticationCode();
   }
 
-  public void requestAccessToken(HttpRequestAdapter http, String clientId) {
+  public void requestAccessToken(HttpRequestAdapter http) {
     String getAccessTokenEndpoint = "https://accounts.spotify.com/api/token";
 
     Map<String, String> bodyParams = new HashMap<>();
     bodyParams.put("grant_type", "authorization_code");
     bodyParams.put("code", authenticationCode);
-    // TODO: This value needs to exactly match the one in the AuthorizaionUri class. It should only be stored in one place.
-    bodyParams.put("redirect_uri", "http://localhost:8080");
-    // TODO: Should we enter clientId into the constructor?
+    bodyParams.put("redirect_uri", REDIRECT_URI);
     bodyParams.put("client_id", clientId);
     bodyParams.put("code_verifier", codeVerifier);
 
@@ -63,12 +61,15 @@ public class SpotifyAuthorization {
     // TODO: Also getting a Refresh Token here, but I'll deal with that later.
   }
 
-  // TODO: Do I want to catch the exception here? What is it doing for me?
-  private static String generateCodeChallenge(String codeVerifier) throws NoSuchAlgorithmException {
-    byte[] data = codeVerifier.getBytes(StandardCharsets.US_ASCII);
-    MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-    byte[] digest = messageDigest.digest(data);
-    return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
+  private static String generateCodeChallenge(String codeVerifier) {
+    try {
+      byte[] data = codeVerifier.getBytes(StandardCharsets.US_ASCII);
+      MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+      byte[] digest = messageDigest.digest(data);
+      return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
+    } catch(NoSuchAlgorithmException e) {
+      throw new RuntimeException(e.getMessage());
+    }
   }
 
   private static String generateRandomString(int size) {

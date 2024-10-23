@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -14,7 +13,6 @@ import com.pd.uber_shuffle.http_adapter.HttpRequestAdapter;
 import com.pd.uber_shuffle.http_adapter.HumbleOkHttpCallerImpl;
 import com.pd.uber_shuffle.http_adapter.OkHttpCaller;
 import com.pd.uber_shuffle.http_adapter.OkHttpHttpRequestAdapter;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -25,17 +23,17 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-class AuthenticatorTest {
+class SpotifyAuthorizationTest {
   private static final String CLIENT_ID = "clientId";
   SpotifyAuthorization auth;
   @BeforeEach
   void setup() {
-    auth = new SpotifyAuthorization();
+    auth = new SpotifyAuthorization(CLIENT_ID);
   }
 
   @Test
-  void generateAuthorizationUrl() throws NoSuchAlgorithmException {
-    AuthorizationUrl authUrl = auth.generateAuthorizationUrl(CLIENT_ID);
+  void generateAuthorizationUrl() {
+    AuthorizationUrl authUrl = auth.generateAuthorizationUrl();
     checkEndpoint(authUrl.toString());
     checkParams(authUrl);
   }
@@ -43,29 +41,30 @@ class AuthenticatorTest {
   @Nested
   class EnterAuthorizationResponse {
     @Test
-    void stateDoesNotMatch() throws NoSuchAlgorithmException {
+    void stateDoesNotMatch() {
       AuthorizationResponse responseBadState = new AuthorizationResponse("http://localhost:8080/?code=12345&state=bad");
-      auth.generateAuthorizationUrl(CLIENT_ID);
+      auth.generateAuthorizationUrl();
       IncorrectStateException e = assertThrows(
         IncorrectStateException.class,
-        () -> auth.hydrateWithAuthorizationResponse(responseBadState),
+        () -> auth.giveAuthorizationResponse(responseBadState),
         "Mismatched state did not throw"
       );
       assertThat(e.getMessage(), is("Response state did not match the requested state"));
     }
 
     @Test
-    void goodAuthorizationResponse() throws NoSuchAlgorithmException, IncorrectStateException {
-      AuthorizationUrl authUrl = auth.generateAuthorizationUrl(CLIENT_ID);
+    void goodAuthorizationResponse() throws IncorrectStateException {
+      AuthorizationUrl authUrl = auth.generateAuthorizationUrl();
       String authCode = "12345";
       AuthorizationResponse authResponse = new AuthorizationResponse("http://localhost:8080/?code="+ authCode + "&state=" + authUrl.getState());
-      auth.hydrateWithAuthorizationResponse(authResponse);
+      auth.giveAuthorizationResponse(authResponse);
       assertThat(auth.getAuthenticationCode(), is("12345"));
     }
   }
 
   @Test
-  void requestAccessToken() {
+  void requestAccessToken() throws IncorrectStateException {
+    auth.giveAuthorizationResponse(new AuthorizationResponse("http://localhost:8080/?code=12345&state=" + auth.getState()));
     HttpRequestAdapter http = mock();
     String getAccessTokenEndpoint = "https://accounts.spotify.com/api/token";
 
@@ -81,34 +80,33 @@ class AuthenticatorTest {
     expectedBodyParams.put("code", auth.getAuthenticationCode());
     expectedBodyParams.put("redirect_uri", "http://localhost:8080");
     expectedBodyParams.put("client_id", CLIENT_ID);
-    expectedBodyParams.put("code_verifier", auth.getCodeChallenge());
+    expectedBodyParams.put("code_verifier", auth.getCodeVerifier());
 
     Map<String, String> expectedHeaders = new HashMap<>();
     expectedHeaders.put("Content-Type", "application/x-www-form-urlencoded");
 
     when(http.makePostRequestNoAuth(getAccessTokenEndpoint, expectedBodyParams, expectedHeaders)).thenReturn(expectedResponse);
 
-    auth.requestAccessToken(http, CLIENT_ID);
+    auth.requestAccessToken(http);
     assertThat(auth.getAccessToken(), is("Bearer Token"));
   }
 
   // Once I have a proper acceptance test, get rid of this.
   @Test
   @Disabled
-  void acceptanceTest() throws NoSuchAlgorithmException, IncorrectStateException {
+  void acceptanceTest() throws IncorrectStateException {
     String clientId = "INSERT CLIENT ID HERE";
-    var acceptanceAuth = new SpotifyAuthorization();
-    var authUrl = acceptanceAuth.generateAuthorizationUrl(clientId);
+    var acceptanceAuth = new SpotifyAuthorization(clientId);
+    var authUrl = acceptanceAuth.generateAuthorizationUrl();
     String toBrowser = authUrl.toString();
 
     String fromBrowser = "";
     var authResponse = new AuthorizationResponse(fromBrowser);
-    acceptanceAuth.hydrateWithAuthorizationResponse(authResponse);
-
+    acceptanceAuth.giveAuthorizationResponse(authResponse);
 
     var okHttp = new OkHttpHttpRequestAdapter(new OkHttpCaller(new HumbleOkHttpCallerImpl()));
 
-    acceptanceAuth.requestAccessToken(okHttp, clientId);
+    acceptanceAuth.requestAccessToken(okHttp);
     assertThat(acceptanceAuth.getAccessToken(), isNotNull());
   }
 
