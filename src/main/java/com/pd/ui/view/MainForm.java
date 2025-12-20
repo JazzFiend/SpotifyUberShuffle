@@ -2,12 +2,14 @@ package com.pd.ui.view;
 
 import com.pd.exceptions.ShuffleException;
 import com.pd.ui.controller.AccessTokenController;
+import com.pd.ui.controller.AuthorizationController;
 import com.pd.ui.controller.GUIErrorController;
 import com.pd.ui.controller.UberShuffleController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.security.NoSuchAlgorithmException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,16 +24,21 @@ public class MainForm {
   private JTextField playlistSizeTextField;
   private JButton generateUberShufflePlaylistButton;
   private JLabel playlistSizeError;
+  private JTextField clientIdTextField;
+  private JButton sendAuthorizationButton;
   private static JFrame frame;
 
   private final UberShuffleController shuffleController;
   private final AccessTokenController tokenController;
+  private final AuthorizationController authorizationController;
 
-  public MainForm(UberShuffleController shuffleController, AccessTokenController tokenController) {
+  public MainForm(UberShuffleController shuffleController, AccessTokenController tokenController, AuthorizationController authorizationController) {
     generateUberShufflePlaylistButton.addActionListener(new GenerateUberShufflePlaylistButtonActionListener());
+    sendAuthorizationButton.addActionListener(new SendAuthorizationButtonActionListener());
     playlistSizeTextField.addKeyListener(new PlaylistSizeTextFieldKeyListener());
     this.shuffleController = shuffleController;
     this.tokenController = tokenController;
+    this.authorizationController = authorizationController;
   }
 
   private class GenerateUberShufflePlaylistButtonActionListener implements ActionListener {
@@ -50,6 +57,21 @@ public class MainForm {
         }
       });
       uberShuffleThread.start();
+    }
+  }
+
+  private class SendAuthorizationButtonActionListener implements ActionListener {
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      Thread authorizationThread = new Thread(() -> {
+        try {
+          authorizationController.clickSendAuthorization(clientIdTextField.getText());
+        } catch (NoSuchAlgorithmException ex) {
+          throw new RuntimeException(ex);
+        }
+      });
+      authorizationThread.start();
     }
   }
 

@@ -85,6 +85,23 @@ public class SpotifyApiHelperImpl implements SpotifyApiHelper {
     return playListSnapshot;
   }
 
+  @Override
+  public void authorize(String state, String codeChallenge, String clientId) {
+    StringBuilder result = new StringBuilder();
+
+    result.append("https://accounts.spotify.com/authorize?");
+    result.append("client_id=").append(clientId).append("&");
+    result.append("response_type=code").append("&");
+    result.append("redirect_uri=http://localhost:8080").append("&");
+    result.append("state=").append(state).append("&");
+    result.append("scope=playlist-modify-private%20playlist-modify-public%20user-library-read").append("&");
+    result.append("code_challenge_method=S256").append("&");
+    result.append("code_challenge=").append(codeChallenge);
+
+    JSONObject response = httpRequestAdapter.makeGetRequest(result.toString());
+    System.out.print(response.toString());
+  }
+
   //TODO: Refactor this. Also, is turning the JSON Exception into a Runtime Exception the best
   // option here?
   private Collection<String> getIDsFromURL(String url, SpotifyIdExtractor idExtractor) {

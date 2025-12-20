@@ -11,11 +11,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class AuthenticationManualTest {
-  public static final String CLIENT_ID = "Replace with client id";
+  public static final String CLIENT_ID = "47e70434159244f3bbf61bb163323ac5";
 
   @ParameterizedTest
   @ValueSource(ints = {1, 5, 43, 128})
-  @Disabled
+//  @Disabled
   void randomStringsBySize(int sequenceSize) {
     String possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     String randomString = Authentication.generateRandomString(sequenceSize);
@@ -27,7 +27,7 @@ class AuthenticationManualTest {
   }
 
   @Test
-  @Disabled
+//  @Disabled
   void authorizationCurl() throws NoSuchAlgorithmException {
     String codeVerifier = Authentication.generateRandomString(128);
     String authorizationCurl = Authentication.generateAuthorizationCurl(codeVerifier, CLIENT_ID);

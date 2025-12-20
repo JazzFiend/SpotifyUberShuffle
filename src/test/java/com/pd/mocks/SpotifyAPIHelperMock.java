@@ -5,6 +5,7 @@ import com.pd.uber_shuffle.spotifyApiHelper.SpotifyApiHelper;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import org.apache.commons.lang.NotImplementedException;
 
 public class SpotifyAPIHelperMock implements SpotifyApiHelper {
       public SpotifyAPIHelperMock() {}
@@ -59,4 +60,9 @@ public class SpotifyAPIHelperMock implements SpotifyApiHelper {
 
         return "PlaylistSnapshot";
     }
+
+  @Override
+  public void authorize(String state, String codeChallenge, String clientId) {
+    throw new NotImplementedException();
+  }
 }

@@ -13,6 +13,7 @@ import com.pd.uber_shuffle.http_adapter.OkHttpHttpRequestAdapter;
 import com.pd.uber_shuffle.spotifyApiHelper.SpotifyApiHelper;
 import com.pd.uber_shuffle.spotifyApiHelper.SpotifyApiHelperImpl;
 import com.pd.ui.controller.AccessTokenController;
+import com.pd.ui.controller.AuthorizationController;
 import com.pd.ui.controller.UberShuffleController;
 
 public class UIMain {
@@ -27,9 +28,10 @@ public class UIMain {
 
     UberShuffleController shuffleController = new UberShuffleController(shuffle);
     AccessTokenController tokenController = new AccessTokenController();
+    var authorizationController = new AuthorizationController(spotifyAPIHelper);
     tokenController.addTokenObserver(http);
 
-    MainForm main = new MainForm(shuffleController, tokenController);
+    MainForm main = new MainForm(shuffleController, tokenController, authorizationController);
     main.startUi();
   }
 }
