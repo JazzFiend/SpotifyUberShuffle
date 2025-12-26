@@ -18,5 +18,5 @@ public interface SpotifyApiHelper {
   String addToPlaylist(String playlistId, List<String> songList);
 
   // Extract to new Interface?
-  void authorize(String state, String codeChallenge, String clientId);
+  String authorize(String state, String codeChallenge, String clientId);
 }

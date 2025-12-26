@@ -5,6 +5,6 @@ import org.json.JSONObject;
 
 public class HtmlToJsonObjectConverter {
   public static JSONObject convertToJsonObject(Response response) {
-
+    return null;
   }
 }

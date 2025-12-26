@@ -8,6 +8,8 @@ import com.pd.uber_shuffle.spotifyIdExtractor.TrackIdFromAlbumExtractor;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 // TODO: This class depends on all of the Extractor classes. There's probably a way to do this better.
@@ -85,21 +87,22 @@ public class SpotifyApiHelperImpl implements SpotifyApiHelper {
     return playListSnapshot;
   }
 
+  // TODO: I don't think this belongs here anymore
   @Override
-  public void authorize(String state, String codeChallenge, String clientId) {
+  public String authorize(String state, String codeChallenge, String clientId) {
     StringBuilder result = new StringBuilder();
 
     result.append("https://accounts.spotify.com/authorize?");
     result.append("client_id=").append(clientId).append("&");
     result.append("response_type=code").append("&");
-    result.append("redirect_uri=http://localhost:8080").append("&");
+    result.append("redirect_uri=").append(URLEncoder.encode("http://127.0.0.1:8080", StandardCharsets.UTF_8)).append("&");
     result.append("state=").append(state).append("&");
     result.append("scope=playlist-modify-private%20playlist-modify-public%20user-library-read").append("&");
     result.append("code_challenge_method=S256").append("&");
     result.append("code_challenge=").append(codeChallenge);
 
-    JSONObject response = httpRequestAdapter.makeGetRequest(result.toString());
-    System.out.print(response.toString());
+    System.out.print(result);
+    return result.toString();
   }
 
   //TODO: Refactor this. Also, is turning the JSON Exception into a Runtime Exception the best

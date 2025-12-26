@@ -11,7 +11,7 @@ public class AuthorizationController {
     this.spotifyApiHelper = spotifyApiHelper;
   }
 
-  public void clickSendAuthorization(String clientId) throws NoSuchAlgorithmException {
-    new Authentication().authorize(spotifyApiHelper, clientId);
+  public String clickSendAuthorization(String clientId) throws NoSuchAlgorithmException {
+    return new Authentication().authorize(spotifyApiHelper, clientId);
   }
 }

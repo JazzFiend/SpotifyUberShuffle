@@ -1,6 +1,7 @@
 package com.pd.authentication;
 
 import com.pd.uber_shuffle.spotifyApiHelper.SpotifyApiHelper;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -35,7 +36,7 @@ public class Authentication {
     result.append("https://accounts.spotify.com/authorize?");
     result.append("client_id=").append(clientId).append("&");
     result.append("response_type=code").append("&");
-    result.append("redirect_uri=http://localhost:8080").append("&");
+    result.append("redirect_uri=").append(URLEncoder.encode("http://127.0.0.1:8080", StandardCharsets.UTF_8)).append("&");
     result.append("state=").append(state).append("&");
     result.append("scope=playlist-modify-private%20playlist-modify-public%20user-library-read").append("&");
     result.append("code_challenge_method=S256").append("&");
@@ -44,12 +45,13 @@ public class Authentication {
     return result.toString();
   }
 
-  public void authorize(SpotifyApiHelper spotifyApiHelper, String clientId)
+  // TODO: Rename me
+  public String authorize(SpotifyApiHelper spotifyApiHelper, String clientId)
       throws NoSuchAlgorithmException {
     String codeVerifier = Authentication.generateRandomString(128);
     String state = generateRandomString(16);
     String codeChallenge = generateCodeChallenge(codeVerifier);
-    spotifyApiHelper.authorize(state, codeChallenge, clientId);
+    return spotifyApiHelper.authorize(state, codeChallenge, clientId);
   }
 
   public static String generateAccessTokenCurl(String code, String clientId, String codeVerifier) {
@@ -57,7 +59,7 @@ public class Authentication {
         "curl -X POST \"https://accounts.spotify.com/api/token\" -H \"Content-Type: application/x-www-form-urlencoded\" -d \""
             + "grant_type=authorization_code&"
             + "code=" + code + "&"
-            + "redirect_uri=http://localhost:8080" + "&"
+            + "redirect_uri=" + URLEncoder.encode("http://127.0.0.1:8080", StandardCharsets.UTF_8) + "&"
             + "client_id=" + clientId + "&"
             + "code_verifier=" + codeVerifier
             + "\"";
