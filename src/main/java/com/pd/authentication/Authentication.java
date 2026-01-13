@@ -28,6 +28,7 @@ public class Authentication {
     return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
   }
 
+  // TODO: Once the manual version of Auth goes away this probably will too.
   public static String generateAuthorizationCurl(String codeVerifier, String clientId) throws NoSuchAlgorithmException {
     StringBuilder result = new StringBuilder();
     String state = generateRandomString(16);
@@ -45,8 +46,7 @@ public class Authentication {
     return result.toString();
   }
 
-  // TODO: Rename me
-  public String authorize(SpotifyApiHelper spotifyApiHelper, String clientId)
+  public String requestUserAuthorization(SpotifyApiHelper spotifyApiHelper, String clientId)
       throws NoSuchAlgorithmException {
     String codeVerifier = Authentication.generateRandomString(128);
     String state = generateRandomString(16);
