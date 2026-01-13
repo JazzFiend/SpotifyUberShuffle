@@ -5,6 +5,7 @@ import com.pd.ui.controller.AccessTokenController;
 import com.pd.ui.controller.AuthorizationController;
 import com.pd.ui.controller.GUIErrorController;
 import com.pd.ui.controller.UberShuffleController;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -15,7 +16,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 
 public class MainForm {
   private JPanel rootPanel;
@@ -26,6 +29,7 @@ public class MainForm {
   private JLabel playlistSizeError;
   private JTextField clientIdTextField;
   private JButton sendAuthorizationButton;
+  private JTextArea authUrlTextArea;
   private static JFrame frame;
 
   private final UberShuffleController shuffleController;
@@ -66,7 +70,9 @@ public class MainForm {
     public void actionPerformed(ActionEvent e) {
       Thread authorizationThread = new Thread(() -> {
         try {
-          authorizationController.clickSendAuthorization(clientIdTextField.getText());
+          String authUri = authorizationController.clickSendAuthorization(clientIdTextField.getText());
+          authUrlTextArea.setText(authUri);
+          frame.pack();
         } catch (NoSuchAlgorithmException ex) {
           throw new RuntimeException(ex);
         }
@@ -99,6 +105,15 @@ public class MainForm {
     setFrame();
     frame.setContentPane(this.rootPanel);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    // TODO: Figure out how to size this on the fly?
+    frame.setPreferredSize(new Dimension(800, 300));
+
+    authUrlTextArea.setLineWrap(true);
+    authUrlTextArea.setWrapStyleWord(false);
+
+    // REMOVE ME!!!!!
+    clientIdTextField.setText("47e70434159244f3bbf61bb163323ac5");
+
     frame.pack();
     frame.setVisible(true);
   }
