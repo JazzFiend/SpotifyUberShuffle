@@ -5,11 +5,8 @@ import com.pd.uber_shuffle.spotifyApiHelper.SpotifyApiHelper;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import org.apache.commons.lang.NotImplementedException;
 
 public class SpotifyAPIHelperMock implements SpotifyApiHelper {
-      public SpotifyAPIHelperMock() {}
-
     @Override
     public Collection<String> getFavoriteTrackIds() {
         Collection<String> favoriteTrackIds = new HashSet<>();

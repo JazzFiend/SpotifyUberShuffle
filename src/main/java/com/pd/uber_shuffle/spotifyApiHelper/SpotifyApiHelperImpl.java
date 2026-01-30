@@ -8,8 +8,6 @@ import com.pd.uber_shuffle.spotifyIdExtractor.TrackIdFromAlbumExtractor;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 // TODO: This class depends on all of the Extractor classes. There's probably a way to do this better.

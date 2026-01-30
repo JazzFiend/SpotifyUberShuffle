@@ -1,7 +1,6 @@
 package com.pd.ui.controller;
 
 import com.pd.authentication.Authentication;
-import com.pd.uber_shuffle.spotifyApiHelper.SpotifyApiHelper;
 import com.pd.uber_shuffle.spotifyApiHelper.SpotifyAuthorizationHelper;
 import java.security.NoSuchAlgorithmException;
 

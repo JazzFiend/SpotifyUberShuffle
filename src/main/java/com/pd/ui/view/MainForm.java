@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
+import javax.swing.WindowConstants;
 
 public class MainForm {
   private JPanel rootPanel;
@@ -83,28 +83,36 @@ public class MainForm {
 
   private class PlaylistSizeTextFieldKeyListener implements KeyListener {
     @Override
-    public void keyTyped(KeyEvent e) { checkPlaylistNumberError(); }
-    @Override
-    public void keyPressed(KeyEvent e) { checkPlaylistNumberError(); }
-    @Override
-    public void keyReleased(KeyEvent e) { checkPlaylistNumberError(); }
-  }
-
-  private void checkPlaylistNumberError() {
-    if(GUIErrorController.isParsableNumber(playlistSizeTextField.getText())) {
-      playlistSizeError.setVisible(false);
-      generateUberShufflePlaylistButton.setEnabled(true);
-    } else {
-      playlistSizeError.setVisible(true);
-      generateUberShufflePlaylistButton.setEnabled(false);
+    public void keyTyped(KeyEvent e) {
+      checkPlaylistNumberError();
     }
-    frame.pack();
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+      checkPlaylistNumberError();
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+      checkPlaylistNumberError();
+    }
+
+    private void checkPlaylistNumberError() {
+      if (GUIErrorController.isParsableNumber(playlistSizeTextField.getText())) {
+        playlistSizeError.setVisible(false);
+        generateUberShufflePlaylistButton.setEnabled(true);
+      } else {
+        playlistSizeError.setVisible(true);
+        generateUberShufflePlaylistButton.setEnabled(false);
+      }
+      frame.pack();
+    }
   }
 
   public void startUi() {
     setFrame();
     frame.setContentPane(this.rootPanel);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     // TODO: Figure out how to size this on the fly?
     frame.setPreferredSize(new Dimension(800, 300));
 

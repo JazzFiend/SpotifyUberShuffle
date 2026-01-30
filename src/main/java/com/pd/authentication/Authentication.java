@@ -1,6 +1,5 @@
 package com.pd.authentication;
 
-import com.pd.uber_shuffle.spotifyApiHelper.SpotifyApiHelper;
 import com.pd.uber_shuffle.spotifyApiHelper.SpotifyAuthorizationHelper;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
