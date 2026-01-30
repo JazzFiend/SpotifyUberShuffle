@@ -1,5 +1,7 @@
 package com.pd.ui.view;
 
+import com.pd.uber_shuffle.spotifyApiHelper.SpotifyAuthorizationHelper;
+import com.pd.uber_shuffle.spotifyApiHelper.SpotifyAuthorizationHelperImpl;
 import com.pd.uber_shuffle.spotifyLibrary.SpotifyLibrary;
 import com.pd.uber_shuffle.spotifyLibrary.SpotifyLibraryImpl;
 import com.pd.uber_shuffle.spotifyPlaylistCreator.SpotifyPlaylistCreator;
@@ -21,6 +23,7 @@ public class UIMain {
     OkHttpCaller caller = new OkHttpCaller(new HumbleOkHttpCallerImpl());
     HttpRequestAdapter http = new OkHttpHttpRequestAdapter(caller);
     SpotifyApiHelper spotifyAPIHelper = new SpotifyApiHelperImpl(http);
+    SpotifyAuthorizationHelper auth = new SpotifyAuthorizationHelperImpl();
 
     SpotifyPlaylistCreator shuffler = new SpotifyPlaylistCreatorImpl(spotifyAPIHelper);
     SpotifyLibrary library = new SpotifyLibraryImpl(spotifyAPIHelper);
@@ -28,7 +31,7 @@ public class UIMain {
 
     UberShuffleController shuffleController = new UberShuffleController(shuffle);
     AccessTokenController tokenController = new AccessTokenController();
-    var authorizationController = new AuthorizationController(spotifyAPIHelper);
+    var authorizationController = new AuthorizationController(auth);
     tokenController.addTokenObserver(http);
 
     MainForm main = new MainForm(shuffleController, tokenController, authorizationController);

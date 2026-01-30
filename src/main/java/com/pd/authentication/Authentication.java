@@ -1,6 +1,7 @@
 package com.pd.authentication;
 
 import com.pd.uber_shuffle.spotifyApiHelper.SpotifyApiHelper;
+import com.pd.uber_shuffle.spotifyApiHelper.SpotifyAuthorizationHelper;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -46,12 +47,12 @@ public class Authentication {
     return result.toString();
   }
 
-  public String requestUserAuthorization(SpotifyApiHelper spotifyApiHelper, String clientId)
+  public String requestUserAuthorization(SpotifyAuthorizationHelper auth, String clientId)
       throws NoSuchAlgorithmException {
     String codeVerifier = Authentication.generateRandomString(128);
     String state = generateRandomString(16);
     String codeChallenge = generateCodeChallenge(codeVerifier);
-    return spotifyApiHelper.authorize(state, codeChallenge, clientId);
+    return auth.authorize(state, codeChallenge, clientId);
   }
 
   public static String generateAccessTokenCurl(String code, String clientId, String codeVerifier) {
