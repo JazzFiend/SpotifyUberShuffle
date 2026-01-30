@@ -87,8 +87,6 @@ public class SpotifyApiHelperImpl implements SpotifyApiHelper {
     return playListSnapshot;
   }
 
-
-
   //TODO: Refactor this. Also, is turning the JSON Exception into a Runtime Exception the best
   // option here?
   private Collection<String> getIDsFromURL(String url, SpotifyIdExtractor idExtractor) {

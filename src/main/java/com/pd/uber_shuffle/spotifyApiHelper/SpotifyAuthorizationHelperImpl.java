@@ -19,7 +19,6 @@ public class SpotifyAuthorizationHelperImpl implements SpotifyAuthorizationHelpe
     result.append("code_challenge_method=S256").append("&");
     result.append("code_challenge=").append(codeChallenge);
 
-    System.out.print(result);
     return result.toString();
   }
 }

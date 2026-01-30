@@ -110,10 +110,6 @@ public class MainForm {
 
     authUrlTextArea.setLineWrap(true);
     authUrlTextArea.setWrapStyleWord(false);
-
-    // REMOVE ME!!!!!
-    clientIdTextField.setText("47e70434159244f3bbf61bb163323ac5");
-
     frame.pack();
     frame.setVisible(true);
   }

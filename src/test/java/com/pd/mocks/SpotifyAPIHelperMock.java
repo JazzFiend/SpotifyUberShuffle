@@ -60,9 +60,4 @@ public class SpotifyAPIHelperMock implements SpotifyApiHelper {
 
         return "PlaylistSnapshot";
     }
-
-  @Override
-  public String authorize(String state, String codeChallenge, String clientId) {
-    throw new NotImplementedException();
-  }
 }
