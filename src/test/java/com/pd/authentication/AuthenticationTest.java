@@ -1,11 +1,8 @@
 package com.pd.authentication;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.pd.uber_shuffle.spotifyApiHelper.SpotifyAuthorizationHelper;
 import com.pd.uber_shuffle.spotifyApiHelper.SpotifyAuthorizationHelperImpl;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;

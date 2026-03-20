@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.NoSuchAlgorithmException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -14,7 +15,7 @@ class AuthenticationManualTest {
 
   @ParameterizedTest
   @ValueSource(ints = {1, 5, 43, 128})
-//  @Disabled
+  @Disabled
   void randomStringsBySize(int sequenceSize) {
     String possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     String randomString = Authentication.generateRandomString(sequenceSize);
@@ -26,7 +27,7 @@ class AuthenticationManualTest {
   }
 
   @Test
-//  @Disabled
+  @Disabled
   void authorizationCurl() throws NoSuchAlgorithmException {
     String codeVerifier = Authentication.generateRandomString(128);
     String authorizationCurl = Authentication.generateAuthorizationCurl(codeVerifier, CLIENT_ID);
