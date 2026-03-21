@@ -2,18 +2,23 @@ package com.pd.ui.view;
 
 import com.pd.exceptions.ShuffleException;
 import com.pd.ui.controller.AccessTokenController;
+import com.pd.ui.controller.AuthorizationController;
 import com.pd.ui.controller.GUIErrorController;
 import com.pd.ui.controller.UberShuffleController;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.security.NoSuchAlgorithmException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 public class MainForm {
   private JPanel rootPanel;
@@ -22,16 +27,22 @@ public class MainForm {
   private JTextField playlistSizeTextField;
   private JButton generateUberShufflePlaylistButton;
   private JLabel playlistSizeError;
+  private JTextField clientIdTextField;
+  private JButton sendAuthorizationButton;
+  private JTextArea authUrlTextArea;
   private static JFrame frame;
 
   private final UberShuffleController shuffleController;
   private final AccessTokenController tokenController;
+  private final AuthorizationController authorizationController;
 
-  public MainForm(UberShuffleController shuffleController, AccessTokenController tokenController) {
+  public MainForm(UberShuffleController shuffleController, AccessTokenController tokenController, AuthorizationController authorizationController) {
     generateUberShufflePlaylistButton.addActionListener(new GenerateUberShufflePlaylistButtonActionListener());
+    sendAuthorizationButton.addActionListener(new SendAuthorizationButtonActionListener());
     playlistSizeTextField.addKeyListener(new PlaylistSizeTextFieldKeyListener());
     this.shuffleController = shuffleController;
     this.tokenController = tokenController;
+    this.authorizationController = authorizationController;
   }
 
   private class GenerateUberShufflePlaylistButtonActionListener implements ActionListener {
@@ -53,30 +64,60 @@ public class MainForm {
     }
   }
 
-  private class PlaylistSizeTextFieldKeyListener implements KeyListener {
+  private class SendAuthorizationButtonActionListener implements ActionListener {
+
     @Override
-    public void keyTyped(KeyEvent e) { checkPlaylistNumberError(); }
-    @Override
-    public void keyPressed(KeyEvent e) { checkPlaylistNumberError(); }
-    @Override
-    public void keyReleased(KeyEvent e) { checkPlaylistNumberError(); }
+    public void actionPerformed(ActionEvent e) {
+      Thread authorizationThread = new Thread(() -> {
+        try {
+          String authUri = authorizationController.clickSendAuthorization(clientIdTextField.getText());
+          authUrlTextArea.setText(authUri);
+          frame.pack();
+        } catch (NoSuchAlgorithmException ex) {
+          throw new RuntimeException(ex);
+        }
+      });
+      authorizationThread.start();
+    }
   }
 
-  private void checkPlaylistNumberError() {
-    if(GUIErrorController.isParsableNumber(playlistSizeTextField.getText())) {
-      playlistSizeError.setVisible(false);
-      generateUberShufflePlaylistButton.setEnabled(true);
-    } else {
-      playlistSizeError.setVisible(true);
-      generateUberShufflePlaylistButton.setEnabled(false);
+  private class PlaylistSizeTextFieldKeyListener implements KeyListener {
+    @Override
+    public void keyTyped(KeyEvent e) {
+      checkPlaylistNumberError();
     }
-    frame.pack();
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+      checkPlaylistNumberError();
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+      checkPlaylistNumberError();
+    }
+
+    private void checkPlaylistNumberError() {
+      if (GUIErrorController.isParsableNumber(playlistSizeTextField.getText())) {
+        playlistSizeError.setVisible(false);
+        generateUberShufflePlaylistButton.setEnabled(true);
+      } else {
+        playlistSizeError.setVisible(true);
+        generateUberShufflePlaylistButton.setEnabled(false);
+      }
+      frame.pack();
+    }
   }
 
   public void startUi() {
     setFrame();
     frame.setContentPane(this.rootPanel);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    // TODO: Figure out how to size this on the fly?
+    frame.setPreferredSize(new Dimension(800, 300));
+
+    authUrlTextArea.setLineWrap(true);
+    authUrlTextArea.setWrapStyleWord(false);
     frame.pack();
     frame.setVisible(true);
   }

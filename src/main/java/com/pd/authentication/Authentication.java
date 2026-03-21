@@ -1,5 +1,7 @@
 package com.pd.authentication;
 
+import com.pd.uber_shuffle.spotifyApiHelper.SpotifyAuthorizationHelper;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -8,8 +10,6 @@ import java.util.Random;
 
 public class Authentication {
   private static final Random rng = new Random();
-
-  private Authentication() {}
 
   public static String generateRandomString(int length) {
     StringBuilder result = new StringBuilder();
@@ -28,6 +28,7 @@ public class Authentication {
     return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
   }
 
+  // TODO: Once the manual version of Auth goes away this probably will too.
   public static String generateAuthorizationCurl(String codeVerifier, String clientId) throws NoSuchAlgorithmException {
     StringBuilder result = new StringBuilder();
     String state = generateRandomString(16);
@@ -36,7 +37,7 @@ public class Authentication {
     result.append("https://accounts.spotify.com/authorize?");
     result.append("client_id=").append(clientId).append("&");
     result.append("response_type=code").append("&");
-    result.append("redirect_uri=http://localhost:8080").append("&");
+    result.append("redirect_uri=").append(URLEncoder.encode("http://127.0.0.1:8080", StandardCharsets.UTF_8)).append("&");
     result.append("state=").append(state).append("&");
     result.append("scope=playlist-modify-private%20playlist-modify-public%20user-library-read").append("&");
     result.append("code_challenge_method=S256").append("&");
@@ -45,12 +46,20 @@ public class Authentication {
     return result.toString();
   }
 
+  public String requestUserAuthorization(SpotifyAuthorizationHelper auth, String clientId)
+      throws NoSuchAlgorithmException {
+    String codeVerifier = Authentication.generateRandomString(128);
+    String state = generateRandomString(16);
+    String codeChallenge = generateCodeChallenge(codeVerifier);
+    return auth.authorize(state, codeChallenge, clientId);
+  }
+
   public static String generateAccessTokenCurl(String code, String clientId, String codeVerifier) {
     return
         "curl -X POST \"https://accounts.spotify.com/api/token\" -H \"Content-Type: application/x-www-form-urlencoded\" -d \""
             + "grant_type=authorization_code&"
             + "code=" + code + "&"
-            + "redirect_uri=http://localhost:8080" + "&"
+            + "redirect_uri=" + URLEncoder.encode("http://127.0.0.1:8080", StandardCharsets.UTF_8) + "&"
             + "client_id=" + clientId + "&"
             + "code_verifier=" + codeVerifier
             + "\"";

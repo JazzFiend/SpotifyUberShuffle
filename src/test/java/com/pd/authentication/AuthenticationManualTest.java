@@ -11,7 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class AuthenticationManualTest {
-  public static final String CLIENT_ID = "Replace with client id";
+  public static final String CLIENT_ID = "INSERT CLIENT ID HERE";
 
   @ParameterizedTest
   @ValueSource(ints = {1, 5, 43, 128})

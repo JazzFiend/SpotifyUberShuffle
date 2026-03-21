@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 
 public class SpotifyAPIHelperMock implements SpotifyApiHelper {
-      public SpotifyAPIHelperMock() {}
-
     @Override
     public Collection<String> getFavoriteTrackIds() {
         Collection<String> favoriteTrackIds = new HashSet<>();
