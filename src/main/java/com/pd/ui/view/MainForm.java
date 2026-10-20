@@ -40,7 +40,8 @@ public class MainForm {
   private final AccessTokenController tokenController;
   private final AuthorizationController authorizationController;
 
-  public MainForm(UberShuffleController shuffleController, AccessTokenController tokenController, AuthorizationController authorizationController) {
+  public MainForm(UberShuffleController shuffleController, AccessTokenController tokenController,
+      AuthorizationController authorizationController) {
     if (this.rootPanel == null) {
       initUI();
     }
@@ -76,7 +77,7 @@ public class MainForm {
     rootPanel.add(playlistSizeTextField, gbc);
 
     playlistSizeError = new JLabel("Playlist Size must be a number.");
-    playlistSizeError.setForeground(new Color(-4515025));
+    playlistSizeError.setForeground(Color.RED);
     playlistSizeError.setVisible(false);
     gbc.gridy = 3;
     rootPanel.add(playlistSizeError, gbc);
@@ -92,6 +93,7 @@ public class MainForm {
     rootPanel.add(clientIdTextField, gbc);
 
     authUrlTextArea = new JTextArea();
+    authUrlTextArea.setEditable(false);
     authUrlTextArea.setPreferredSize(new Dimension(150, 50));
     gbc.gridy = 6;
     gbc.fill = GridBagConstraints.BOTH;
@@ -112,7 +114,8 @@ public class MainForm {
         try {
           generateUberShufflePlaylistButton.setEnabled(false);
           tokenController.setNewAccessToken(accessTokenTextField.getText());
-          shuffleController.clickUberShuffle(userIdTextField.getText(), Integer.parseInt(playlistSizeTextField.getText()));
+          shuffleController.clickUberShuffle(userIdTextField.getText(),
+              Integer.parseInt(playlistSizeTextField.getText()));
         } catch (ShuffleException ex) {
           JOptionPane.showMessageDialog(null, ex.getMessage(), "UberShuffle",
               JOptionPane.ERROR_MESSAGE);
